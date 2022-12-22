@@ -1,0 +1,1008 @@
+<?xml version="1.0"?>
+
+<xsd:schema version="0.9"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://jfreereport.sourceforge.net/namespaces/reports/simple"
+            targetNamespace="http://jfreereport.sourceforge.net/namespaces/reports/simple">
+  <xsd:annotation>
+    <xsd:documentation>
+      This schema describes the format of the simple report definitions in
+      JFreeReport. This document is aimed for the JFreeReport 0.9 release.
+
+      When parsing these report definitions, all generated elements and styles
+      get mapped into the HTML namespace. Definitions, which cannot be expressed
+      in HTML get mapped into the Compatiblity namespace instead.
+
+      The simple report definition format was the standard format for
+      JFreeReport 0.8.7 and older releases. Its use is now deprecated and
+      all reports should be migrated to the 'simplex' format.
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:attribute name="fontstyle">
+    <xsd:annotation>
+      <xsd:documentation>
+        The font style property is a short hand property to define the font
+        style of report elements.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NMTOKEN">
+        <xsd:enumeration value="plain"/>
+        <xsd:enumeration value="bold"/>
+        <xsd:enumeration value="italic"/>
+        <xsd:enumeration value="bold-italic"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+  <xsd:attribute name="alignment">
+    <xsd:annotation>
+      <xsd:documentation>
+        The horizontal alignment decribes how content is aligned *within* the
+        element. It does not decribe the element's alignment in its parent and
+        it cannot be used to define alignments of elements within bands.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NMTOKEN">
+        <xsd:enumeration value="left"/>
+        <xsd:enumeration value="center"/>
+        <xsd:enumeration value="right"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+  <xsd:attribute name="vertical-alignment">
+    <xsd:annotation>
+      <xsd:documentation>
+        The vertical alignment decribes how content is aligned *within* the
+        element. It does not decribe the element's alignment in its parent and
+        it cannot be used to define alignments of elements within bands.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NMTOKEN">
+        <xsd:enumeration value="top"/>
+        <xsd:enumeration value="middle"/>
+        <xsd:enumeration value="bottom"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+  <xsd:attribute name="stroke-style">
+    <xsd:annotation>
+      <xsd:documentation>
+        The stroke style property defines the stroke type of shape elements.
+        Shape-elements in JFreeReport 0.8.7 were used to define backgrounds
+        of elements.
+
+        In JFreeReport 0.9, they are no longer connected to cell backgrounds,
+        and CSS style definitions should be used for that purpose.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NMTOKEN">
+        <xsd:enumeration value="solid"/>
+        <xsd:enumeration value="dashed"/>
+        <xsd:enumeration value="dotted"/>
+        <xsd:enumeration value="dot-dash"/>
+        <xsd:enumeration value="dot-dot-dash"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+  <xsd:attribute name="pageformat" type="xsd:NMTOKEN" default="text">
+    <xsd:annotation>
+      <xsd:documentation>
+        The pageformat describes the default page size applied to the report.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NMTOKEN">
+        <xsd:enumeration value="PAPER10X11"/>
+        <xsd:enumeration value="PAPER10X13"/>
+        <xsd:enumeration value="PAPER10X14"/>
+        <xsd:enumeration value="PAPER12X11"/>
+        <xsd:enumeration value="PAPER15X11"/>
+        <xsd:enumeration value="PAPER7X9"/>
+        <xsd:enumeration value="PAPER8X10"/>
+        <xsd:enumeration value="PAPER9X11"/>
+        <xsd:enumeration value="PAPER9X12"/>
+        <xsd:enumeration value="A0"/>
+        <xsd:enumeration value="A1"/>
+        <xsd:enumeration value="A2"/>
+        <xsd:enumeration value="A3"/>
+        <xsd:enumeration value="A3_TRANSVERSE"/>
+        <xsd:enumeration value="A3_EXTRA"/>
+        <xsd:enumeration value="A3_EXTRATRANSVERSE"/>
+        <xsd:enumeration value="A3_ROTATED"/>
+        <xsd:enumeration value="A4"/>
+        <xsd:enumeration value="A4_TRANSVERSE"/>
+        <xsd:enumeration value="A4_EXTRA"/>
+        <xsd:enumeration value="A4_PLUS"/>
+        <xsd:enumeration value="A4_ROTATED"/>
+        <xsd:enumeration value="A4_SMALL"/>
+        <xsd:enumeration value="A5"/>
+        <xsd:enumeration value="A5_TRANSVERSE"/>
+        <xsd:enumeration value="A5_EXTRA"/>
+        <xsd:enumeration value="A5_ROTATED"/>
+        <xsd:enumeration value="A6"/>
+        <xsd:enumeration value="A6_ROTATED"/>
+        <xsd:enumeration value="A7"/>
+        <xsd:enumeration value="A8"/>
+        <xsd:enumeration value="A9"/>
+        <xsd:enumeration value="A10"/>
+        <xsd:enumeration value="ANSIC"/>
+        <xsd:enumeration value="ANSID"/>
+        <xsd:enumeration value="ANSIE"/>
+        <xsd:enumeration value="ARCHA"/>
+        <xsd:enumeration value="ARCHB"/>
+        <xsd:enumeration value="ARCHC"/>
+        <xsd:enumeration value="ARCHD"/>
+        <xsd:enumeration value="ARCHE"/>
+        <xsd:enumeration value="B0"/>
+        <xsd:enumeration value="B1"/>
+        <xsd:enumeration value="B2"/>
+        <xsd:enumeration value="B3"/>
+        <xsd:enumeration value="B4"/>
+        <xsd:enumeration value="B4_ROTATED"/>
+        <xsd:enumeration value="B5"/>
+        <xsd:enumeration value="B5_TRANSVERSE"/>
+        <xsd:enumeration value="B5_ROTATED"/>
+        <xsd:enumeration value="B6"/>
+        <xsd:enumeration value="B6_ROTATED"/>
+        <xsd:enumeration value="B7"/>
+        <xsd:enumeration value="B8"/>
+        <xsd:enumeration value="B9"/>
+        <xsd:enumeration value="B10"/>
+        <xsd:enumeration value="C4"/>
+        <xsd:enumeration value="C5"/>
+        <xsd:enumeration value="C6"/>
+        <xsd:enumeration value="COMM10"/>
+        <xsd:enumeration value="DL"/>
+        <xsd:enumeration value="DOUBLEPOSTCARD"/>
+        <xsd:enumeration value="DOUBLEPOSTCARD_ROTATED"/>
+        <xsd:enumeration value="ENV9"/>
+        <xsd:enumeration value="ENV10"/>
+        <xsd:enumeration value="ENV11"/>
+        <xsd:enumeration value="ENV12"/>
+        <xsd:enumeration value="ENV14"/>
+        <xsd:enumeration value="ENVC0"/>
+        <xsd:enumeration value="ENVC1"/>
+        <xsd:enumeration value="ENVC2"/>
+        <xsd:enumeration value="ENVC3"/>
+        <xsd:enumeration value="ENVC4"/>
+        <xsd:enumeration value="ENVC5"/>
+        <xsd:enumeration value="ENVC6"/>
+        <xsd:enumeration value="ENVC65"/>
+        <xsd:enumeration value="ENVC7"/>
+        <xsd:enumeration value="ENVCHOU3"/>
+        <xsd:enumeration value="ENVCHOU3_ROTATED"/>
+        <xsd:enumeration value="ENVCHOU4"/>
+        <xsd:enumeration value="ENVCHOU4_ROTATED"/>
+        <xsd:enumeration value="ENVDL"/>
+        <xsd:enumeration value="ENVINVITE"/>
+        <xsd:enumeration value="ENVISOB4"/>
+        <xsd:enumeration value="ENVISOB5"/>
+        <xsd:enumeration value="ENVISOB6"/>
+        <xsd:enumeration value="ENVITALIAN"/>
+        <xsd:enumeration value="ENVKAKU2"/>
+        <xsd:enumeration value="ENVKAKU2_ROTATED"/>
+        <xsd:enumeration value="ENVKAKU3"/>
+        <xsd:enumeration value="ENVKAKU3_ROTATED"/>
+        <xsd:enumeration value="ENVMONARCH"/>
+        <xsd:enumeration value="ENVPERSONAL"/>
+        <xsd:enumeration value="ENVPRC1"/>
+        <xsd:enumeration value="ENVPRC1_ROTATED"/>
+        <xsd:enumeration value="ENVPRC2"/>
+        <xsd:enumeration value="ENVPRC2_ROTATED"/>
+        <xsd:enumeration value="ENVPRC3"/>
+        <xsd:enumeration value="ENVPRC3_ROTATED"/>
+        <xsd:enumeration value="ENVPRC4"/>
+        <xsd:enumeration value="ENVPRC4_ROTATED"/>
+        <xsd:enumeration value="ENVPRC5"/>
+        <xsd:enumeration value="ENVPRC5_ROTATED"/>
+        <xsd:enumeration value="ENVPRC6"/>
+        <xsd:enumeration value="ENVPRC6_ROTATED"/>
+        <xsd:enumeration value="ENVPRC7"/>
+        <xsd:enumeration value="ENVPRC7_ROTATED"/>
+        <xsd:enumeration value="ENVPRC8"/>
+        <xsd:enumeration value="ENVPRC8_ROTATED"/>
+        <xsd:enumeration value="ENVPRC9"/>
+        <xsd:enumeration value="ENVPRC9_ROTATED"/>
+        <xsd:enumeration value="ENVPRC10"/>
+        <xsd:enumeration value="ENVPRC10_ROTATED"/>
+        <xsd:enumeration value="ENVYOU4"/>
+        <xsd:enumeration value="ENVYOU4_ROTATED"/>
+        <xsd:enumeration value="EXECUTIVE"/>
+        <xsd:enumeration value="FANFOLDUS"/>
+        <xsd:enumeration value="FANFOLDGERMAN"/>
+        <xsd:enumeration value="FANFOLDGERMANLEGAL"/>
+        <xsd:enumeration value="FOLIO"/>
+        <xsd:enumeration value="ISOB0"/>
+        <xsd:enumeration value="ISOB1"/>
+        <xsd:enumeration value="ISOB2"/>
+        <xsd:enumeration value="ISOB3"/>
+        <xsd:enumeration value="ISOB4"/>
+        <xsd:enumeration value="ISOB5"/>
+        <xsd:enumeration value="ISOB5_EXTRA"/>
+        <xsd:enumeration value="ISOB6"/>
+        <xsd:enumeration value="ISOB7"/>
+        <xsd:enumeration value="ISOB8"/>
+        <xsd:enumeration value="ISOB9"/>
+        <xsd:enumeration value="ISOB10"/>
+        <xsd:enumeration value="LEDGER"/>
+        <xsd:enumeration value="LEGAL"/>
+        <xsd:enumeration value="LEGAL_EXTRA"/>
+        <xsd:enumeration value="LETTER"/>
+        <xsd:enumeration value="LETTER_TRANSVERSE"/>
+        <xsd:enumeration value="LETTER_EXTRA"/>
+        <xsd:enumeration value="LETTER_EXTRATRANSVERSE"/>
+        <xsd:enumeration value="LETTER_PLUS"/>
+        <xsd:enumeration value="LETTER_ROTATED"/>
+        <xsd:enumeration value="LETTER_SMALL"/>
+        <xsd:enumeration value="MONARCH"/>
+        <xsd:enumeration value="NOTE"/>
+        <xsd:enumeration value="POSTCARD"/>
+        <xsd:enumeration value="POSTCARD_ROTATED"/>
+        <xsd:enumeration value="PRC16K"/>
+        <xsd:enumeration value="PRC16K_ROTATED"/>
+        <xsd:enumeration value="PRC32K"/>
+        <xsd:enumeration value="PRC32K_ROTATED"/>
+        <xsd:enumeration value="PRC32K_BIG"/>
+        <xsd:enumeration value="PRC32K_BIGROTATED"/>
+        <xsd:enumeration value="QUARTO"/>
+        <xsd:enumeration value="STATEMENT"/>
+        <xsd:enumeration value="SUPERA"/>
+        <xsd:enumeration value="SUPERB"/>
+        <xsd:enumeration value="TABLOID"/>
+        <xsd:enumeration value="TABLOIDEXTRA"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+  <xsd:attribute name="orientation">
+    <xsd:annotation>
+      <xsd:documentation>
+        The orientation attribute describes the page orientation.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NMTOKEN">
+        <xsd:enumeration value="portrait"/>
+        <xsd:enumeration value="landscape"/>
+        <xsd:enumeration value="reverse_landscape"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+
+  <xsd:element name="configuration">
+    <xsd:annotation>
+      <xsd:documentation>
+        Configures the report using the report configuration collection.
+
+        This allows to tweak the report processing in various ways and is the
+        primary method to specify default properties for the export methods.
+
+        Configuration properties only accept plain String values.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="property" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType mixed="true">
+            <xsd:simpleContent>
+              <xsd:extension base="xsd:string">
+                <xsd:attribute name="name" type="xsd:string"/>
+              </xsd:extension>
+            </xsd:simpleContent>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="parser-config">
+    <xsd:annotation>
+      <xsd:documentation>
+        The parser config defines a simple macro-language to replace defined
+        tokens found in text or attribute values during the parsing.
+
+        Support for the parser config has been dropped in JFreeReport 0.9, as
+        a clean stylesheet definition has the same effect at runtime.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="property" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType mixed="true">
+            <xsd:simpleContent>
+              <xsd:extension base="xsd:string">
+                <xsd:attribute name="name" type="xsd:string"/>
+              </xsd:extension>
+            </xsd:simpleContent>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="include">
+    <xsd:complexType>
+      <xsd:attribute name="src" type="xsd:anyURI" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="report">
+    <xsd:annotation>
+      <xsd:documentation>
+        The report element is the root element of the report definition.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:restriction base="xsd:anyType">
+          <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element ref="configuration"/>
+            <xsd:element ref="parser-config"/>
+            <xsd:element ref="include"/>
+            <xsd:element ref="reportheader"/>
+            <xsd:element ref="reportfooter"/>
+            <xsd:element ref="pageheader"/>
+            <xsd:element ref="pagefooter"/>
+            <xsd:element ref="no-data-band"/>
+            <xsd:element ref="watermark"/>
+            <xsd:element ref="groups"/>
+            <xsd:element ref="items"/>
+            <xsd:element ref="functions"/>
+          </xsd:choice>
+          <xsd:attribute name="width" type="xsd:positiveInteger" use="optional"/>
+          <xsd:attribute name="height" type="xsd:positiveInteger" use="optional"/>
+          <xsd:attribute name="name" type="xsd:string" use="optional"/>
+          <xsd:attribute ref="orientation" use="optional"/>
+          <xsd:attribute ref="pageformat" use="optional"/>
+          <xsd:attribute name="leftmargin" type="xsd:positiveInteger" use="optional"/>
+          <xsd:attribute name="topmargin" type="xsd:positiveInteger" use="optional"/>
+          <xsd:attribute name="rightmargin" type="xsd:positiveInteger" use="optional"/>
+          <xsd:attribute name="bottommargin" type="xsd:positiveInteger" use="optional"/>
+          <xsd:attribute name="pagespan" type="xsd:positiveInteger" use="optional"/>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:attributeGroup name="position-attr-group">
+    <xsd:attribute name="x" type="xsd:string" use="optional"/>
+    <xsd:attribute name="y" type="xsd:string" use="optional"/>
+    <xsd:attribute name="width" type="xsd:string" use="optional"/>
+    <xsd:attribute name="height" type="xsd:string" use="optional"/>
+  </xsd:attributeGroup>
+
+  <xsd:attributeGroup name="basicform-attr-group">
+    <xsd:annotation>
+      <xsd:documentation>
+        The 'dynamic' attribute is ignored now. All elements now behave as
+        if they were dynamic by default. If the dynamic flag is not set at
+        parse time or if it is set to false, a maximum-size equal to the given
+        size is enforced on the element to copy the old behaviour.
+
+        The 'visible' flag is translated into 'display:none' if found to be false.
+
+        The 'styleClass' attribute is translated into the corresponding 'class'
+        attribute of the HTML namespace.
+
+        The 'layout-cachable' flag is ignored. If there is caching, then it must
+        be smart enough to safely detect uncachable conditions.
+
+        The 'href' and 'href-window' get mapped into the 'target-name' and
+        '-x-href-target' style properties.
+
+        The 'trim-text-content' and 'reserved-literal' get mapped into the
+        'text-overflow-mode' and 'text-overflow-ellipsis' style properties
+        instead.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="color" type="xsd:string" use="optional"/>
+    <xsd:attribute name="styleClass" type="xsd:string" use="optional"/>
+    <xsd:attribute name="name" type="xsd:string" use="optional"/>
+    <xsd:attribute name="dynamic" type="xsd:boolean" use="optional"/>
+    <xsd:attribute name="visible" type="xsd:string" use="optional"/>
+    <xsd:attribute name="layout-cachable" type="xsd:string" use="optional"/>
+    <xsd:attribute name="href" type="xsd:anyURI" use="optional"/>
+    <xsd:attribute name="href-window" type="xsd:string" use="optional"/>
+    <xsd:attribute name="reserved-literal" type="xsd:string" use="optional"/>
+    <xsd:attribute name="trim-text-content" type="xsd:boolean" use="optional"/>
+  </xsd:attributeGroup>
+
+  <xsd:attributeGroup name="fontdef-attr-group">
+    <xsd:annotation>
+      <xsd:documentation>
+        The 'fontname' attribute is mapped into the 'fontface' style property.
+        The built-in java fonts get mapped into the built-in CSS-font faces.
+
+        The 'fontstyle' attribute gets mapped into the corresponding style sheet
+        values for 'font-weight' (for bold) and 'font-style' (for italics).
+
+        The 'fontsize' attribute is mapped into the 'font-size' style property.
+
+        The 'fs*' attributes also get mapped into the various corresponding
+        css font style attributes.
+
+        The 'lineheight' attribute here has a directly corresponding css style
+        property.
+
+        The 'excel-wrap-text' attribute gets mapped into the libLayout specific
+        style property '-x-liblayout-excel-wrap-text'.
+
+        The 'vertical-alignment' gets mapped into the corresponding css
+        attribute. Due to the different interpretation of that style property,
+        layouts might be affected by this translation.
+
+        The 'alignment' attribute is mapped directly to its CSS counterpart.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="fontname" type="xsd:string" use="optional"/>
+    <xsd:attribute ref="fontstyle" use="optional"/>
+    <xsd:attribute name="fontsize" type="xsd:float" use="optional"/>
+    <xsd:attribute name="fsbold" type="xsd:boolean" use="optional"/>
+    <xsd:attribute name="fsitalics" type="xsd:boolean" use="optional"/>
+    <xsd:attribute name="fsunderline" type="xsd:boolean" use="optional"/>
+    <xsd:attribute name="fsstrikethr" type="xsd:boolean" use="optional"/>
+    <xsd:attribute name="lineheight" type="xsd:string" use="optional"/>
+    <xsd:attribute name="excel-wrap-text" type="xsd:boolean" use="optional"/>
+    <xsd:attribute ref="vertical-alignment" use="optional"/>
+    <xsd:attribute ref="alignment" use="optional"/>
+  </xsd:attributeGroup>
+
+
+  <xsd:complexType name="element-type">
+    <xsd:annotation>
+      <xsd:documentation>
+        If the parent of an element is a band, which has an absolute-positioning
+        layout manager, all direct child elements of that band get converted
+        into block elements with an absolute positioning (relative to this band),
+        else all direct child elements get converted into ordinary block level
+        elements.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:restriction base="xsd:anyType">
+        <xsd:attributeGroup ref="position-attr-group"/>
+        <xsd:attributeGroup ref="basicform-attr-group"/>
+      </xsd:restriction>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:element name="label">
+    <xsd:annotation>
+      <xsd:documentation>
+        A label gets mapped into a separate block element and a StaticText node
+        for the textual content.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="element-type">
+          <xsd:attributeGroup ref="fontdef-attr-group"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:attribute name="fieldname" type="xsd:string" use="required"/>
+  <xsd:attribute name="nullstring" type="xsd:string" use="required"/>
+  <xsd:attribute name="resource-base" type="xsd:string" use="required"/>
+
+  <xsd:element name="string-field">
+    <xsd:annotation>
+      <xsd:documentation>
+        A string field is a simple value field with no content formating.
+
+        This field gets translated into a block level 'ContentElement' with a
+        standard GetValueExpression applied to it.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="element-type">
+          <xsd:attributeGroup ref="fontdef-attr-group"/>
+          <xsd:attribute ref="fieldname"/>
+          <xsd:attribute ref="nullstring"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="resource-label">
+    <xsd:annotation>
+      <xsd:documentation>
+        A resource-label looks up the given key in a resource-bundle.
+
+        This field gets translated into a block level 'ContentElement' with a
+        standard TranslateStaticValueExpression applied to it. The resource-base
+        attribute is translated into the corresponding expression parameter.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="element-type">
+          <xsd:attributeGroup ref="fontdef-attr-group"/>
+          <xsd:attribute ref="resource-base"/>
+          <xsd:attribute ref="nullstring"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="resource-field">
+    <xsd:annotation>
+      <xsd:documentation>
+        A resource-field reads a value column and uses that value as lookup
+        key for a resource-bundle based translation.
+
+        This field gets translated into a block level 'ContentElement' with a
+        standard TranslateValueExpression applied to it. The resource-base
+        attribute is translated into the corresponding expression parameter.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="element-type">
+          <xsd:attributeGroup ref="fontdef-attr-group"/>
+          <xsd:attribute ref="resource-base"/>
+          <xsd:attribute ref="nullstring"/>
+          <xsd:attribute ref="fieldname"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="resource-message">
+    <xsd:annotation>
+      <xsd:documentation>
+        A resource-message uses the given string to read a message-format string
+        from the resourcebundle. That message-format is then used to format the
+        data from the columns referenced in the message-format string.
+
+        This field gets translated into a block level 'ContentElement' with a
+        standard TranslateValueExpression applied to it. The resource-base
+        attribute is translated into the corresponding expression parameter.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="element-type">
+          <xsd:attributeGroup ref="fontdef-attr-group"/>
+          <xsd:attribute ref="resource-base"/>
+          <xsd:attribute ref="nullstring"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <xsd:complexType name="band-type">
+    <xsd:annotation>
+      <xsd:documentation>
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="element-type">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+          <xsd:element ref="label"/>
+          <xsd:element ref="string-field"/>
+          <xsd:element ref="number-field"/>
+          <xsd:element ref="date-field"/>
+          <xsd:element ref="imageref"/>
+          <xsd:element ref="image-field"/>
+          <xsd:element ref="imageurl-field"/>
+          <xsd:element ref="rectangle"/>
+          <xsd:element ref="resource-label"/>
+          <xsd:element ref="resource-field"/>
+          <xsd:element ref="resource-message"/>
+          <xsd:element ref="line"/>
+          <xsd:element ref="round-rectangle"/>
+          <xsd:element ref="drawable-url-field"/>
+          <xsd:element ref="drawableref"/>
+          <xsd:element ref="component-field"/>
+          <xsd:element ref="message-field"/>
+          <xsd:element ref="anchor-field"/>
+          <xsd:element ref="drawable-field"/>
+          <xsd:element ref="shape-field"/>
+          <xsd:element ref="band"/>
+        </xsd:choice>
+        <xsd:attributeGroup ref="fontdef-attr-group"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="root-band-type">
+    <xsd:annotation>
+      <xsd:documentation>
+        The 'fixed-position' attribute is translated into an absolute positioned
+        element definition in CSS using 'position:absolute' and 'top: ? pt'.
+
+        The 'layout' attribute defines, whether the element will be a plain
+        block element ('display:block') or an element where all children will
+        be absolutly positioned. This is a parse-time translation, so code that
+        used to change the layout-manager afterwards will no longer work.
+        Only the two known layout manager implementation will be recognized.
+
+        Position attributes other than 'height' get ignored for root level bands.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="band-type">
+        <xsd:attribute name="fixed-position" type="xsd:string" use="optional"/>
+        <xsd:attribute name="layout" type="xsd:string" use="optional"/>
+        <xsd:attribute name="pagebreak-after-print" type="xsd:boolean" use="optional"/>
+        <xsd:attribute name="pagebreak-before-print" type="xsd:boolean" use="optional"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:element name="reportheader">
+    <xsd:annotation>
+      <xsd:documentation>
+        The report header is the first band printed in the normal flow.
+        However, usually the first band on the page is the page header.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="root-band-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="reportfooter">
+    <xsd:annotation>
+      <xsd:documentation>
+        The report footer is the last band printed in the normal flow.
+        However, usually the last band on the page is the page footer.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="root-band-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="groupheader">
+    <xsd:annotation>
+      <xsd:documentation>
+        A group header is printed before a group starts. A group start
+        is invoked when one element that was referenced in the field list
+        changes and on the start of the report generation.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="root-band-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="groupfooter">
+    <xsd:annotation>
+      <xsd:documentation>
+        A group footer is printed when a group is finished. A group is
+        finished, when one element, that was referenced in the field list,
+        changes its value and at the end of the report generation.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="root-band-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="pageheader">
+    <xsd:annotation>
+      <xsd:documentation>
+        A page header is printed at the top of each page. If the page headers
+        content is too big for the page, it will be continued on the next page
+        and no page footer will be generated for these intermediate pages.
+
+        After adding the page header, at least one line of normal content is
+        printed, before the page footer is taken into account (and possibly
+        printed).
+
+        If the page header and the first line of content did not leave enough
+        space for the page footer, the page footer is considered overly large
+        and will be continued on a new page, for which no new pagefooter is
+        generated.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="root-band-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="pagefooter">
+    <xsd:annotation>
+      <xsd:documentation>
+        A page footer is printed at the bottom of every page. If the pagefooters
+        content cannot be printed on the current page, all subsequent pages
+        will not generate a pagefooter until that overly large pagefooter has
+        been completed.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="root-band-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="no-data-band">
+    <xsd:annotation>
+      <xsd:documentation>
+        This band is printed if there is no data. It will be generated as
+        'detail-section'.
+
+        The band is a standard-root-band with a display condition set to
+        'org.jfree.report.functions.sys.IsEmptyDataExpression'
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="root-band-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="watermark">
+    <xsd:annotation>
+      <xsd:documentation>
+        The watermark element is printed before any other element is
+        printed on a new page. That band can consume the complete space
+        of the page - it will never trigger a pagebreak.
+
+        This element is added as 'out-of-order' band to the report. It depends
+        on the output target whether this band definition will generate content.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="root-band-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="items">
+    <xsd:annotation>
+      <xsd:documentation>
+        The itemband holds the content. It will be generated as 'detail-section'.
+
+        The band is a standard-root-band with a display condition set to
+        'org.jfree.report.functions.sys.IsEmptyDataExpression'
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="root-band-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="band">
+    <xsd:annotation>
+      <xsd:documentation>
+        A generic band. A band can hold other elements.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="band-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="fields">
+    <xsd:annotation>
+      <xsd:documentation>
+        This is a parse helper to keep group definitions together. The element
+        has no semantic meaning and does not create anything.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:restriction base="xsd:anyType">
+          <xsd:sequence>
+            <xsd:element name="field" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="group">
+    <xsd:annotation>
+      <xsd:documentation>
+        In JFreeReport 0.9 the grouping behaviour changed radiacally.
+        Groups in JFreeReport 0.8.x were no report elements, were limited to
+        simple column compare operations and were very restricted in their
+        definitions.
+
+        Nesting of groups was not expressed directly in neither the XML nor
+        the API of JFreeReport. Whether a group was a subgroup was dereived from
+        the field definitions of the groups. The group that defines a superset
+        of the other group's field list was marked as subgroup. Disjunct elements
+        were forbidden.
+
+        An old group definition gets mapped into the new format by defining the
+        group's grouping-expression to be a GroupByExpression. The groups are
+        nested by applying the same rules as described above.
+
+        As there is no group list object anymore, groups cannot be referenced
+        by functions using the old element searching methods.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:restriction base="xsd:anyType">
+          <xsd:sequence>
+            <xsd:element ref="fields"/>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+              <xsd:element ref="groupheader"/>
+              <xsd:element ref="groupfooter"/>
+            </xsd:choice>
+          </xsd:sequence>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="groups">
+    <xsd:annotation>
+      <xsd:documentation>
+        This is a parse helper to keep group definitions together. The element
+        has no semantic meaning and does not create anything.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:restriction base="xsd:anyType">
+          <xsd:sequence>
+            <xsd:element ref="group"/>
+          </xsd:sequence>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+
+
+
+  <xsd:element name="functions">
+    <xsd:annotation>
+      <xsd:documentation>
+        The function collection is one of the darkest chapters in parsing the
+        old report definitions. The old function model used global functions,
+        which got always called on all report events.
+
+        Since JFreeReport 0.9, functions are attached to elements and get only
+        called when that element is currently being processed. The function
+        model has been simplified by removing the global state and replacing
+        that state with a very local model.
+
+        When mapping JFreeReport 0.8.x function definitions into JFreeReport 0.9
+        report definitions, these global functions must be attached to their
+        referenced elements. For this, the parser has to know all functions and
+        how they possibly connect to the report elements. A mapping rule has
+        to be executed to convert the old function definition into an equivalent
+        JFreeReport 0.9 definition.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:restriction base="xsd:anyType">
+          <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element ref="expression"/>
+            <xsd:element ref="function"/>
+            <xsd:element ref="property-ref"/>
+          </xsd:choice>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:attribute name="encoding" type="xsd:NMTOKEN" default="text">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NMTOKEN">
+        <xsd:enumeration value="base64"/>
+        <xsd:enumeration value="text"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+  <xsd:element name="property-definition" abstract="true">
+    <xsd:complexType mixed="true">
+      <xsd:annotation>
+        <xsd:documentation>
+          A property is a named entity used in Expressions and the configuration
+          definition.
+
+          If the encoding is set to 'base64', it is assumed, that
+          the content of this property is a base64 encoded serialized java-object.
+          If the encoding is set to 'text' (the default), the resulting string
+          will be used to build the object.
+
+          The 'class' attribute will be ignored for 'base64' encoded serialized
+          content.
+        </xsd:documentation>
+      </xsd:annotation>
+      <xsd:complexContent>
+        <xsd:extension base="xsd:anyType">
+          <xsd:sequence>
+            <xsd:element ref="property"/>
+          </xsd:sequence>
+          <xsd:attribute name="name" type="xsd:string"/>
+          <xsd:attribute name="class" type="xsd:string" use="optional"/>
+          <xsd:attribute ref="encoding"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="property-ref" substitutionGroup="property-definition">
+    <xsd:annotation>
+      <xsd:documentation>
+        A property-ref defines a report parameter.
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+
+  <xsd:element name="property" substitutionGroup="property-definition">
+    <xsd:annotation>
+      <xsd:documentation>
+        A property is a named entity used in Expressions and the configuration
+        definition.
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+
+  <xsd:element name="expression">
+    <xsd:annotation>
+      <xsd:documentation>
+        An expression computes a single value. An expression defined here can
+        be unnamed. Expressions without a name will not appear in the datarow
+        and cannot be referenced by other expressions.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="class" use="required" type="xsd:string"/>
+      <xsd:attribute name="name" use="required" type="xsd:string"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="function">
+    <xsd:annotation>
+      <xsd:documentation>
+        An expression computes a single value. An expression defined here can
+        be unnamed. Expressions without a name will not appear in the datarow
+        and cannot be referenced by other expressions.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="class" use="required" type="xsd:string"/>
+      <xsd:attribute name="name" use="required" type="xsd:string"/>
+    </xsd:complexType>
+  </xsd:element>
+
+
+</xsd:schema>

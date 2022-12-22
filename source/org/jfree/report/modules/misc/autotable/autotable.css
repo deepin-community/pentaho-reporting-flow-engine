@@ -1,0 +1,35 @@
+@namespace url(http://jfreereport.sourceforge.net/namespaces/reports/flow/extension/autotable);
+@namespace report url(http://jfreereport.sourceforge.net/namespaces/engine);
+
+/**
+ * Declare your styles for these elements here ..
+ */
+
+header-row, footer-row, data-row {
+  display: table-row;
+}
+
+auto-table-header,auto-table-footer, auto-table-cell {
+  display: table-cell;
+}
+
+auto-table-header,auto-table-footer {
+  font-weight: bold;
+  font-size: 120%;
+}
+
+/**
+ * This makes sure that the content is copied from the data-flags collection
+ * into the layouted document flow ..
+ */
+auto-table-content[report|content] {
+  content: attr("report|content");
+  display: inline;
+}
+
+auto-table {
+  display: table;
+  table-layout: auto;
+  width: 100%;
+}
+

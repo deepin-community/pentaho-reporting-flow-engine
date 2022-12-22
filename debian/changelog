@@ -1,0 +1,159 @@
+pentaho-reporting-flow-engine (0.9.4-5.1) unstable; urgency=medium
+
+  * Non maintainer upload by the Reproducible Builds team.
+  * No source change upload to rebuild on buildd with .buildinfo files.
+
+ -- Holger Levsen <holger@debian.org>  Tue, 22 Dec 2020 19:58:30 +0100
+
+pentaho-reporting-flow-engine (0.9.4-5) unstable; urgency=medium
+
+  [ tony mancill ]
+  * moved the package to git
+  * update Vcs URLs for migration to git
+  * bump Standards-Version to 3.9.8
+  * use debhelper 10
+  * drop dependency on dpatch and add dependency on quilt
+  * disable timestamps in javadoc (Closes: #859976)
+  * update debian/rule to use DH sequencer
+  * add boilerplate README.source
+
+  [ Rene Engelhard ]
+  * fix jfreereport symlink (closes: #702858)
+  * change build-dependency from bsh to libbsh-java
+
+ -- Rene Engelhard <rene@debian.org>  Sat, 16 Dec 2017 16:01:36 +0000
+
+pentaho-reporting-flow-engine (0.9.4-4) unstable; urgency=low
+
+  * fix build-dep: s/libjcommon-serializer-java/libserializer-java/ 
+    (closes: #652785)
+
+ -- Rene Engelhard <rene@debian.org>  Thu, 29 Dec 2011 23:24:40 +0100
+
+pentaho-reporting-flow-engine (0.9.4-3) unstable; urgency=low
+
+  * the "the-third-time-is-a-charm" release.
+  * fix Uploaders: 
+
+ -- Rene Engelhard <rene@debian.org>  Mon, 10 Oct 2011 00:08:40 +0200
+
+pentaho-reporting-flow-engine (0.9.4-2) unstable; urgency=low
+
+  * really move back to Debian Java Maintainers 
+
+ -- Rene Engelhard <rene@debian.org>  Wed, 28 Sep 2011 00:04:25 +0000
+
+pentaho-reporting-flow-engine (0.9.4-1) unstable; urgency=low
+
+  * New upstream release
+  * switch back to Debian Java Maintainers, me as Uploader
+  * remove JRE depends
+  * move to Section: java 
+  * add classpath to jar using jh_classpath
+  * use jh_depends / ${java:Depends}
+  * add dummy binary-arch target...
+
+ -- Rene Engelhard <rene@debian.org>  Mon, 26 Sep 2011 17:25:28 +0000
+
+pentaho-reporting-flow-engine (0.9.2-4) unstable; urgency=low
+
+  * Team upload
+
+  [ Matthias Klose ]
+  * (Build-)depend on default-jre/-jdk.
+
+  [ Torsten Werner ]
+  * Orphaning package.
+
+ -- Torsten Werner <twerner@debian.org>  Sat, 06 Aug 2011 09:44:09 +0200
+
+pentaho-reporting-flow-engine (0.9.2-3) unstable; urgency=low
+
+  * add missing symlink for jfreereport.jar
+  * upload to unstable
+
+ -- Rene Engelhard <rene@debian.org>  Thu, 14 Feb 2008 23:37:51 +0100
+
+pentaho-reporting-flow-engine (0.9.2-2) experimental; urgency=low
+
+  [ Rene Engelhard ]
+  * conflict/provide/replace libjfreereport-java[-doc]
+
+  [ Michael Koch ]
+  * Added watch file.
+  * Fixed debian/copyright.
+  * Added Homepage, Vcs-Svn and Vcs-Browser fields.
+  * Updated Standards-Version to 3.7.3.
+  * Added myself to Uploaders.
+
+ -- Michael Koch <konqueror@gmx.de>  Thu, 14 Feb 2008 21:35:51 +0100
+
+pentaho-reporting-flow-engine (0.9.2-1) experimental; urgency=low
+
+  * New upstream release
+  * update debian/ for JFreeReport -> Pentaho Reporting Flow Engine 
+
+ -- Rene Engelhard <rene@debian.org>  Mon, 28 Jan 2008 13:43:59 +0100
+
+jfreereport (0.9.0-05-4) unstable; urgency=low
+
+  * fix dpatch creation oversight... 
+
+ -- Rene Engelhard <rene@debian.org>  Wed, 28 Nov 2007 15:21:26 +0100
+
+jfreereport (0.9.0-05-3) unstable; urgency=low
+
+  * fix manual to refer to the local DTDs - thanks Kumar Appaiah
+    (closes: #453205)
+
+ -- Rene Engelhard <rene@debian.org>  Wed, 28 Nov 2007 14:44:43 +0100
+
+jfreereport (0.9.0-05-2) unstable; urgency=low
+
+  * upload to unstable 
+
+ -- Rene Engelhard <rene@debian.org>  Mon, 05 Nov 2007 01:16:02 +0100
+
+jfreereport (0.9.0-05-1) experimental; urgency=low
+
+  * reintroduce
+  * add Debian Java Maintainers as Maintainer: and me as Uploader
+  * new upstream release
+
+ -- Rene Engelhard <rene@debian.org>  Mon, 27 Aug 2007 21:30:40 +0200
+
+libjfreereport-java (0.8.3c-5) unstable; urgency=high
+
+  * Recognize the JAVA_HOME directories for ibm-j2sdk1.4 and
+    blackdown-j2sdk1.4 (Closes: #306923)
+
+ -- Christian Bayle <bayle@debian.org>  Fri, 29 Apr 2005 20:33:22 +0200
+
+libjfreereport-java (0.8.3c-4) unstable; urgency=high
+
+  * Transition to liblog4j1.2-java (Closes: #306754) 
+
+ -- Christian Bayle <bayle@debian.org>  Thu, 28 Apr 2005 22:50:59 +0200
+
+libjfreereport-java (0.8.3c-3) unstable; urgency=low
+
+  * Applied Andreas Jochens patch 'debian_patch' not executable and
+    missing Build-Depends on 'bsh' (Closes: bug#294043)
+
+ -- Christian Bayle <bayle@debian.org>  Tue,  8 Feb 2005 20:16:05 +0100
+
+libjfreereport-java (0.8.3c-2) unstable; urgency=low
+
+  * Added dependancy to libpixie-java
+  * Changed dependancy from liblog4j to liblog4j-java (Closes: bug#266073)
+  * libjfreereport-java only works with liblog4j 1.1.3 as suggested in 
+  * bug #191175
+
+ -- Christian Bayle <bayle@debian.org>  Sun,  2 Jan 2005 23:56:17 +0100
+
+libjfreereport-java (0.8.3c-1) unstable; urgency=low
+
+  * Initial Release, closes ITP (Closes: bug#199757).
+
+ -- Christian Bayle <bayle@debian.org>  Thu, 10 Jul 2003 02:04:27 +0200
+

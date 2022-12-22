@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+
+<xsd:schema version="0.9"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://jfreereport.sourceforge.net/namespaces/datasources/sql"
+            targetNamespace="http://jfreereport.sourceforge.net/namespaces/datasources/sql">
+  <xsd:annotation>
+    <xsd:documentation>
+      This schema describes the format of SQL-Datasource definitions in
+      JFreeReport. This document is aimed for the JFreeReport 0.9 release.
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:element name="sql-datasource">
+    <xsd:annotation>
+      <xsd:documentation>
+        An datasource consists of an (optional) connection info block and a
+        sequence of named queries.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="connection" minOccurs="0" maxOccurs="1"/>
+        <xsd:element ref="query" minOccurs="1" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="connection">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="driver" minOccurs="1" maxOccurs="1"/>
+        <xsd:element ref="url" minOccurs="1" maxOccurs="1"/>
+        <xsd:element ref="properties" minOccurs="0" maxOccurs="1"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="driver" type="xsd:string"/>
+
+  <xsd:element name="url" type="xsd:string"/>
+
+  <xsd:element name="properties">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="property" minOccurs="1" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="property">
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="xsd:string">
+          <xsd:attribute name="name" type="xsd:string"/>
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="config">
+    <xsd:complexType>
+      <xsd:attribute name="label-mapping" type="xsd:boolean"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="query">
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="xsd:string">
+          <xsd:attribute name="name" type="xsd:string"/>
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>

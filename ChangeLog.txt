@@ -1,0 +1,2530 @@
+---------------
+1.  WHAT's NEW
+---------------
+A list of changes in recent versions:
+
+0.9.2:    (30-Jul-2007)
+        * [BUG] Precomputing variables did not work and resulted always in an
+          IllegalStateException.
+          
+        * SectionLayoutController#isNodeVisible is now protected and can be
+          overrided in subclasses. This allows subclasses to filter out certain
+          nodes.
+
+        * Libraries updated.
+
+0.9.1:    (24-Jun-2007)
+        * [BUG] Empty data-sources were not handled correctly and the system
+          tried to query the first (but non-existent) row anyway. To fix this
+          is a sane way, all datasources now start counting their rows at 1,
+          and row zero is reserved for the special state 'BEFORE_FIRST_ROW'.
+
+        * [BUG] Skipping invisible elements using a display-condition caused
+          state-bugs. The system forwarded to the end of the report, while it
+          should only skip to the end of the hidden element itself.
+
+0.9.0-05: (27-Apr-2007)
+        * SectionLayoutController has been changed to be more extensible when
+          subclasses try to implement different iteration patterns.
+
+0.9.0-04: (02-Apr-2007) 
+        * Simplified the layout controller API. It should be easier now to
+          derive own layout controller without having to reimplement everything
+          from scratch.
+
+        * FormulaExpression and FormulaFunction now allow some introspection of
+          the contained formula without having to recompile it every time.
+
+0.9.0-03: (07-Mar-2007)
+        * Libraries updated.
+
+0.9.0-02: (25-Jan-2007)
+        * [BUG] Thousands of bugs fixed, which caused weird crashes everywhere.
+
+        * Bean-DataSources and SQL-DataSources aligned with the 0.8 codeline.
+
+0.9.0-01  (11-Dec-2006)
+        * [BUG] The ZIP-HTML-Dialog crashed due to an invalid resource reference.
+
+        * [BUG] A couple of strange layout issues has been fixed.
+
+        * [BUG] Sub-Reporting was barely working due to some bugs in the
+          data processing.
+
+        * ReportData-objects no longer misbehave if the underlying table is
+          empty. Any query to an empty data-source returns null. Positioning
+          the cursor to the row 'zero' is always valid.
+
+        * The default structural modell contained in 'org.jfree.report.structure'
+          is no longer mandatory. There are no dependencies to that package
+          on the expression handling or layout- and data-controllers anymore.
+
+        * A new auto-table module allows to create generic reports without
+          listing all columns of the table.
+
+0.9.0:    (3-Dec-2006)
+        * What's new: Everything!
+
+          - SubReports, FormulaSupport, Complex Layouts, Elements that can
+            span more than one page - we got 'em all.
+
+          JFreeReport 0.9 is a complete rewrite of the good old JFreeReport
+          engine. One of the ugly consequences of that rewrite is the total
+          loss of backward compatiblity.
+
+          With JFreeReport 0.9 we dropped the absolute-positioned banded
+          report paradigm and entered the world of Document centric reports.
+
+          For more details on what has changed and what is still on the ToDo
+          list, have a look at the JFreeReport site and forum.
+
+0.8.7-10: (2-Nov-2006)
+        * [BUG] Updated the DTD to contain the stroke-style definitions.
+
+        * Added support to concat PDFs to PDFExportUtil. (Mimil)
+
+        * Updated the parser to spit out a explicit warning if JFreeReport
+          has not yet been booted. Parsing will fail afterwards, but now it
+          should be clear why and how to prevent it.
+
+0.8.7-9: (26-Sep-2006)
+        * [BUG] The report converter was not working, due to a missing
+          call to boot the report engine.
+
+        * [BUG] Follow-up to the inaccurate printing bug in 0.8.7-7:
+          Changed the normalization transformation. It seems that this
+          bug is related to an bug in the JDK that messes up the scaling
+          (Java-Bug #4992456). The fix from 0.8.7-7 made things worse than
+          better, so that patch was undone.
+
+          Until there is a final solution, we cannot guarantee printout
+          sizes in all cases. If the JDK behaves correctly, all measurements
+          are given in point (assuming a resolution of 72dpi).
+
+        * [BUG] Printing caused rendering errors in the report preview. This
+          was caused by reusing the preview's report pane for the printing
+          (to possibly avoid the repagination). Now a separate report pane is
+          used on all printing operations.
+
+        * [BUG] As long as we have to stick with iText, abstracting and
+          caching the font creation is not possible. iText's font handler
+          insists of either using *filenames* (not even URLs, that would be to
+          simple) or byte-arrays to feed the font-data into the library. Using
+          byte-arrays is out of question if you have to deal with 'Arial Unicode
+          MS' (a 28MB font file), so we are effectively restricted to files.
+
+          That means: LibLoader is not used for font loading anymore, we are
+          back using the old an inefficient file-name passing.
+
+        * [PERFORMANCE] Resolved some scalability issues when running several
+          reports concurrently. The StyleKey-implementation caused some severe
+          congestion due to some synchronization code, that - if written
+          slightly different - could have been easily avoided.
+
+          The original report was posted in the blog referenced below, and
+          later also posted in the Pentaho-Forum.
+
+          http://jroller.com/page/galina?entry=pentaho_jfreereport_reporting_framework_performance
+
+        * Direct printing now supports to define the number-of-copies using
+          the report configuration property
+          'org.jfree.report.modules.output.pageable.graphics.print.NumberOfCopies'
+
+        * The Excel-Export is now able to append the generated report content
+          to an exsiting workbook file. Radek Maciaszek wrote the patch for that.
+
+        * ImageContent and drawable content can now also be loaded from an BLOB
+          or byte-array. The 'image-url-field' and 'drawable-url-field' types
+          now handles these source-types along with the URL loading.
+
+0.8.7-8: (03-Sep-2006)
+          This release contains bugfixes for the next stable version of
+          Pentaho. Its always better to have an extra release than to have
+          extra complaints, isn't it?
+
+        * [BUG] The extwriter produced extra whitespaces for 'property-ref'
+          tags with content inside.
+
+        * [BUG] Images on page-spanning reports where misplaced if they crossed
+          the inner page boundary.
+
+0.8.7-7: (31-Aug-2006)
+        * [BUG] Martin Schmidt reported, that the results of the ColumnMultiply,
+          ColumnDifference and ColumnDivisionExpression were invalid, due to
+          some stupid initialization bugs.
+
+        * [BUG] Martin Schmidt fixed a ClassCastException in the
+          ElementTrafficLightFunction.
+
+        * [BUG] Repeating GroupHeaders of the outer-most group behaved invalidly
+          and repeating group-footers did not reserve enough space to be printed
+          correctly all the time.
+
+        * [BUG] CSV separator was hardcoded.
+
+        * [BUG] Printing was sometimes inaccurate, as some printer spoolers
+          added some extra scaling to the process. We now try to prevent that
+          by applying the normalization scale to the PrinterGraphics.
+
+        * [BUG] The HTML-Viewer called Internet Explorer ignores vertical
+          alignments on table-cells. Therefore, we now also add 'valign'
+          attributes to the generated table cells in the HTML export.
+
+        * [BUG] Exceptions when accessing encodings do no longer stop the
+          GUI. There are still JDK bugs pending on that issue (particulary
+          IBM-CP970).
+
+        * [BUG] The HTML-Export GUI did not allow to place the data directory
+          of the Directory-Export outside the directory containing the main
+          HTML file.
+
+        * Added 'org.jfree.report.modules.gui.*.DefaultFileName' property key
+          that could be used to give a default file name in export GUIs. Use
+          '~/' to reference the user's home directory.
+
+        * Added a caching parser frontend. Parsing is slow, so caching that
+          (using libloader's cache) saves a lot of time. To use the cache,
+          use the CachingReportGenerator instead of the ReportGenerator class.
+
+        * The CreateHyperlinksFunction now has a new parameter called 'target'
+          to specify the target-window of the generated links directly. This
+          only affects the HTML export.
+
+0.8.7-6: (27-Jul-2006)
+        * [BUG] The PDFAction for generating links was invalid.
+
+        * [BUG] The ColumnAggregationExpressions used double-variables for
+          their computation. This caused accuracy issues. Now all computation
+          expressions use BigDecimals for their computation.
+
+        * [BUG] The DateCutExpression did not work at all.
+
+        * [BUG] Setting a solid white background in Excel was funny, but
+          stupid. Now cells have no background, unless specified explicitly.
+
+        * [BUG] Graphics2D operations in the PDF export did not share the
+          default font encoding and embedding settings of the PDFOutputTarget.
+
+        * [BUG] A duplicate mnemonic for the english locale has been reported
+          and fixed.
+
+        * The StaticDataSourceFactory now accepts some more variations on the
+          factory method syntax.
+
+        * The ItemHideFunction accepts two new parameters (ignorePageBreaks,
+          ignoreGroupBreaks) which allow to override the reset-behaviour.
+
+        * The DateSpanExpression now also accepts Numbers.
+
+0.8.7-5: (29-Jun-2006)
+        * [BUG] Both the HTML-Export GUI and HtmlProcessor class did not handle
+          the report configuration correctly, and therefore caused errors when
+          trying to export to XHTML.
+
+        * [BUG] Serialization issues caused by a stupidly placed 'transient'
+          flag caused NullPointerExceptions after serialzing/deserializing
+          of Number- and Date- fields.
+
+        * [BUG] The I18N-Demo was not well-defined and thus one of the to-be-
+          translated strings was totally buggy.
+
+        * [BUG] The MessageFormatSupport crashed when the format string was
+          buggy. Now it does no longer crash - it fails silently now (but
+          drops a Log-message).
+
+        * [BUG] The number-field and date-field did not use the locale
+          defined by the ResourceBundleFactory of the report.
+
+        * [BUG] Booting was not synchronized. (This has been fixed in jcommon).
+
+        * [BUG] A bug in LibFonts caused some italics and oblique fonts to not
+          be recognized correctly.
+
+        * A primitive version of the Query-Interfaces of JFreeReport 0.9 have
+          been downported into this version. The new DataFactory and Query
+          properties of the JFreeReport object can be used to let the engine
+          perform the query. These properties can also be defined in the
+          XML definitions (using the <datafactory> tag).
+
+        * The ReportDrawable interface offers an easy way for drawables to gain
+          knowledge about their environment. Drawables get access to the report
+          configuration, the current LayoutSupport and the element's stylesheet.
+
+        * The Graphics2D that is passed to Drawable-instances for rendering is
+          now preinitialized with the current font, stroke and paint.
+
+        * The Internationalization-Demo now uses a ReportControler to allow to
+          select the locale for the report at runtime.
+
+        * The reset behaviour on new pages and group starts of the
+          ElementVisibilitySwitchFunction can now be controled using the
+          boolean flags 'resetOnPageStart' and 'resetOnGroupStart'.
+
+0.8.7-4: (30-May-2006)
+        * [BUG] The XML-Writer declared an obsolete system location of the DTD
+          for the generated report definitions.
+
+        * [BUG] The XML-Writer included the system properties (like "name" and
+          "dependencyLevel" into the function's properties list.
+
+        * [BUG] The Extended Report Definition DTD did not include the class
+          attribute for properties.
+
+        * [BUG] The BigDecimals were used with the 'double' constructor instead
+          of using the 'string' constructor. Evil me.
+
+        * [BUG] The Simple-XML's line reading was invalid for lines with X2 < X1
+          or Y2 < Y1. The resulting element behaved funny, but definitly not
+          correctly.
+
+        * [BUG] An invalid cast limited the number of generatable Excel-rows to
+          32768 instead of the physical limit of 65535 rows.
+
+        * [BUG] A bug in the StaticBandLayouter caused elements with an x2, that
+          is greater than the parent's usable space, to violate the parent's
+          containing rule. This caused funny effects in the Excel export.
+
+        * The Export-Dialog's habbit of storing the last user input for a report
+          can now be configured using a set of new configuration properties.
+
+        * The HTML exports 'copy-external-images' property is now configurable
+          using the report configuration. It is enabled by default, so that
+          all referenced images get copied into the specified data directory
+          (or into the ZIP-File for the ZIP-Export).
+
+        * The Stroke-Dashes are now based on the pen-width by default. The
+          global configuration property 'org.jfree.report.DynamicStrokeDashes'
+          can revert this change to the old static version.
+
+        * The stroke width for Excel-Exports now generates more suitable
+          definitions by modifying a few range tests.
+
+0.8.7-3: (26-Apr-2006)
+        * [BUG] Previewing expressions did not work properly, as the preview
+          expressions still referenced to the old row.
+
+        * [BUG] The message-field and the MessageFieldElementFactory did not
+          set the 'nullString' property, even if it was set in the
+          ElementFactory.
+
+        * [BUG] Missing or invalid encoding implementations do no longer
+          interrupt the font registration process.
+
+        * TextFormatExpression has been enhanced to optionally URLEncode the
+          complete content or single elements.
+
+        * A new URLEncodeExpression encodes Strings for URL-computations.
+
+        * A new demo shows how to group against values computed from expressions.
+
+        * A complete set of Greek translations has been written by George
+          Hatzisymeon.
+
+0.8.7-2: (28-Mar-2006)
+        * [BUG] The page setup plugin was not initialized properly. In
+          conjunction with other bugs (related to the export plugin handling)
+          this made the page setup option totally unavailable.
+
+0.8.7-1: (23-Mar-2006)
+        * [BUG] The ExportDialogs did not allow the closing of the window using
+          the normal operating system operations.
+
+        * [BUG] Synchronization was awkward within the JDK1.4 printing
+          (ext-project)
+
+        * [BUG] The first pageheader of a report did not have access to a
+          validly initialized datarow. This caused exceptions, troubles and
+          weird behaviour.
+
+        * [BUG] The Czech resources of PDF gui module were invalid. This
+          has been reported and fixed by Ivo Panacek.
+
+        * [BUG] The ToLowerCaseFunction did call 'toUppercase' which is
+          outspoken stupid.
+
+        * [BUG] Image sizing was wrong. There was an ugly mixup between the
+          'point' and 'pixel' unit types, which caused images to appear
+          smaller than they should be (or to be scaled where they should not
+          be scaled). This primarily affected the HTML and Excel output.
+
+        * [BUG] The stroke recognition was not correctly implemented and did
+          not match the stroke factory. This affected the Excel and HTML table
+          targets.
+
+        * [BUG] The font mapper did ignore fully qualified font names. Fonts
+          specified by their full name (Name Type '4') get now mapped to their
+          font families.
+
+        * Added flush() calls to all export targets, as unclosed and non-flushed
+          streams seem to be a common source of errors.
+
+        * New XML Elements exist for creating RoundRectangles and Ellipses.
+
+        * The Logging to JDK 1.4 and Log4J has been removed from JFreeReport.
+          These classes now form an library on its own and therefore are only
+          dependend on JCommon.
+
+        * Note: There is an unresolved bug in the RTF-Writer, which causes
+          IndexOutOfBoundsExceptions.
+
+0.8.7: (10-Feb-2006)
+        * [BUG] Performing a pagebreak-before-print on a group header and
+          printing values from the datarow in the pagefooter of the previous
+          page already showed the contents of the to-be-printed group.
+
+        * [BUG] Type1 Fonts can be embedded, if there is a 'pfb' file for that
+          font. The old code simply declared all of these fonts to be
+          non-embeddable, which is definitly not true.
+
+        * [BUG] The excel export used the localized pattern to define the cell-
+          format for number and date cells. This caused trouble in most non-
+          english environments.
+
+        * [BUG] The excel cell width factor was invalid and caused trouble on
+          some systems. The new default scale factor has been increased to work
+          around these problems. It can be adjusted using the report
+          configuration for cases where the default is not appropriate.
+
+        * [BUG] The excel color mapping was still buggy. The bug caused gray
+          areas to be rendered in red shades.
+
+        * [BUG] The line height of text elements was computed incorrectly and
+          therefore clipped large glyphs. Now, the maximum height defined for the
+          current font is used to define the line height.
+
+          This bugfix is not enabled by default, as it has the side effect,
+          that the effective lineheight is now greater than the font's declared
+          height most of the time. Therefore an element with Arial 10 needs a
+          defined element height of 11pt or 12pt to display a single line.
+
+          Please read the corresponding section in 'migration.txt' on how to
+          activate the bugfix.
+
+          Setting a custom line height in conjunction with multiline elements
+          caused exceptions due to another bug in that code.
+
+        * [BUG] The TrueType support did not register the available fonts. Thus
+          no truetype font information was used. Additionally, the PDF target
+          did not apply bold strokes to the fonts.
+
+        * [BUG] Component-Drawing was causing an infinite loop because of stupid
+          coding.
+
+        * [BUG] The preview components did not shutdown the repagination thread
+          properly. The thread eventually lived forever, eating valuable resources.
+
+        * [BUG] Groups declaring their headers to have a 'pagebreak-before-print'
+          behaved differently than groups having a 'pagebreak-after-print'
+          on their footers. This was caused by an incomplete roll-back of the
+          layout-states.
+
+        * [BUG] The About-dialog was a frame, which caused trouble on modal
+          settings. Additionally, the export dialogs did not search the
+          PreviewProxyBase's window when building the modal export dialogs,
+          which also caused trouble in some (rather unusual) setups.
+
+        * As a workaround for a bug in the JDK 1.5, DecimalFormats with
+          an empty format string get initialized manually using a hardcoded
+          format string as generated by JDK 1.4.
+
+        * The Message-Format handling has been improved. The Message-field
+          now recognizes the 'nullstring' attribute and replaces invalid or
+          missing content with that string.
+
+        * A huge set of new functions has been added to ease the handling of
+          dates and strings, whithout having to fall back to BeanShell-Scripts.
+
+          - a set of column aggregate expressions makes it easier to compute
+            results from columns of the same row.
+
+          - The DateExpression and VariableDateExpression allow the construction
+            of Date objects by encapsulating the functionality of
+            java.util.Calendar.
+
+          - String functions allow to truncate, replace or transform strings.
+
+          - Various compare functions allow to compare fields with static or
+            other field values.
+
+        * Expressions and functions now both have access to the current report
+          configuration and the ResourceBundleFactory holding all the
+          localization information.
+
+          Warning: This changed the interface of the Expression class.
+          Expressions and functions derived from AbstractExpression should not
+          notice a difference in most cases and should work as usual.
+
+        * The new field type 'resource-message' provides an internationalizable
+          counterpart of the message-field. The field's format string is read
+          from an resourcebundle and must have the same format as the
+          message-field.
+
+        * Shape-elements have a new property to define the stroke-type of the
+          shapes contained in them. In the Simple-XML definition, a set of
+          predefined strokes is available.
+
+        * The ExpressionRuntime interface now allows expressions to safely
+          detect the current export type.
+
+        * A new band type is available to display special content if the table
+          model of the report does not contain any data. The 'no-data-band'
+          replaces the 'itemband' in such cases and is printed exactly one time.
+
+          The new functions HideElementIfDataAvailableExpression and
+          ShowElementIfDataAvailableExpression can be used to customize the
+          report layout even further, if needed.
+
+0.8.6-6: (27-Dec-2005)
+        * [BUG] The demo did not initialize JFreeReport through the
+          JFreeReportBoot class and thus ran into an ugly NullPointer.
+
+        * The CSV-Data export is more configurable now. It does no longer
+          add extra state columns by default and which bands should be exported
+          can be controled using report properties. I also added some convienience
+          methods to the CSVDataReportUtil so that exporting to CSV files
+          is now a single line of code.
+
+0.8.6-5: (21-Dec-2005)
+        * [BUG] The colors used in the HTML export stylesheets were not
+          conforming to CSS2.1. Users working with the internet explorer using
+          one of the named colors in their reports did not see these colors at
+          all, as invalid style definitions got ignored by the browser.
+
+        * [BUG] The sheet-name function and the page headers in the table
+          exports now always use the data from the next report state. This
+          prevents some ugly misbehaviour when using 'pagebreak-after-print'
+          flags on group footers.
+
+        * [BUG] Duplicate values returned by the sheetName-function do no longer
+          interrupt the report process in the Excel-Exporter. Invalid sheetnames
+          do no longer cause trouble - they will be ignored.
+
+        * [BUG] The cell-width and height computations in previous versions of
+          JFreeReport have been some kind of voodoo. This has been fixed and
+          now the width and height are always correct.
+
+        * The Excel export target does now support images. Drawables get
+          converted to images before they get added to the sheets.
+
+        * The build process did not include the demo documentation files in
+          the demo-jar.
+
+        * Replacing the Exit and About-Action in the Preview-Dialogs works
+          again. Replacing the navigation or zoom actions is no longer allowed
+          (as it makes no sense to replace them).
+
+        * The GUI-icons have been factored out into an own package. The
+          skinning facility makes it easier to replace the icons and/or the
+          resource bundles of the GUI components.
+
+        * The PDF-Output target now interprets the '_blank' window name as
+          command to open the link target document in a new window.
+
+0.8.6-4: (20-Nov-2005)
+        * (As the public CVS is not available, this release is used to make
+          the current changes available to the public.)
+
+        * [BUG] In the PDF output target printing scaled images did not work
+          propertly, as the clipping code used the unscaled coordinates.
+
+        * Removed most of the 'strictfp' modifiers. They were no longer
+          neccessary and a bug in the IBM JDK tries to apply the class-wide
+          modifier to all abstract methods as well, which renders JFreeReport
+          useless on that JDK version.
+
+0.8.6-3: (14-Nov-2005)
+        * [BUG] Distributing text content over multiple pages caused exceptions
+          if the string got split and continued on a later page.
+
+        * [BUG] The ComponentDrawable was not able to handle java.awt.Window
+          instances.
+
+        * [BUG] The Excel-Color computation was totally messed up. The new
+          algorithm uses science instead of magic (and HSB instead of RGB)
+
+        * [BUG] The ImageContentFactory was not able to handle invalid inputs,
+          which caused ClassCastExceptions.
+
+        * [BUG] The image handling for the HTML export was invalid and caused
+          ugly scaled images.
+
+        * [BUG] The CSV and Excel export dialogs did not update the report
+          configuration properly.
+
+        * [BUG] The PDF export did not create italic or bold fonts. A new library
+          was introduced to solve the problem. 'libFonts' allows to map fonts
+          into Font-Families and to select the most appropriate font file for
+          a given style.
+
+        * JCommon has reached 1.0.0. JFreeChart users should switch to the
+          latest CVS version of JFreeChart til the next release.
+
+        * SurveyScale-Drawable is now serializable.
+
+        * A 'PrintableTableModel' has been added, which allows to override the
+          column names specified in the tablemodel. This is a contribution by
+          'LordOfCode'.
+
+        * Repeating Group-Footers have been implemented to support the printing
+          of running totals in large lists, without having to use the pagefooter.
+
+0.8.6-2: (17-Oct-2005)
+        * [BUG] Having a pagebreak-after-print on a group-footer without
+          having an report footer caused the table-type reporting to fail.
+
+        * [BUG] Printing repeated group-headers used the wrong table row index
+          if the printing occured if the group-header for the next group instance
+          has been printed just before the pagebreak occured.
+
+        * [BUG] An invalid computation of the maximum size of dynamic elements
+          caused all content to disapear, if the absolute position of the
+          dynamic element was greater than the horizontal space left for
+          the element content.
+
+        * It is now possible to add HTML link-targets to the elements. This way,
+          the link can be opened in a named or new frame or window.
+
+0.8.6-1: (12-Oct-2005)
+        * [BUG] There was inconsistent behaviour when exporting single table
+          reports using PageHeaders with 'print-on-lastpage' set to false.
+
+        * [BUG] Exporting multipage-wide reports to the plain-text export
+          did not work correctly.
+
+        * [BUG] The TableExport behaved unpredictable, including raising
+          errors when using the "StackedLayoutmanager". The real cause was
+          hidden in the LayoutManager API which did not compute band sizes
+          correctly. Combining relative y-positions and dynamic elements
+          creates undefined behaviour and must be avoided at all price.
+
+        * [BUG] The BaseFontSupport did not accept font files other than
+         'ttf' due to an overly paranoid check. (Bug #1299056)
+
+        * [BUG] The FunctionUtilities.findElement and findAllElements methods
+          did not take the given root band into account and therefore only worked
+          on subbands.
+
+        * [BUG] The CSVTokenizer did not handle trailing commas correctly.
+          Rob (redgeler), reported the bug and provided a test case to track
+          it down.
+
+        * [BUG] The PreviewDialog did not pass a 'parent' reference to its
+          repagination dialog, thus making that dialog inaccessible.
+
+        * Added a new Drawable-Element type to allow high-quality printing of
+          AWT and Swing components. The component-element is available from within
+          the SimpleXML, the ExtendedXML and the API. The new 'ComponentDrawing'-
+          demo shows how to use it.
+
+        * Modified the Simple DTD to make most of the style properties optional.
+          Styles can be inherited using stylesheets, as shown in the new
+          StyleSheet demo.
+
+        * New Functions: PageItemSumFunction, PageItemCountFunction,
+          HideNullValuesFunction and ShowElementByNameFunction added.
+
+        * Minor performance improvements when handling singlelined text, which
+          gives roughly a 25% bonus on the report processing time.
+
+        * Modified the ANT-Scripts to make custom builds easier. All compilation
+          tasks have been factored out and can be called directly using the
+          'antcall' task.
+
+0.8.6: (21-Sep-2005)
+        * [BUG] The XML Parser handler for function properties did not handle
+          specified classes correctly.
+
+        * [BUG] Michael Tennes fixed a show-stopping bug in the text width
+          calculation in the PlainTextOutputTarget.
+
+        * [BUG] Changed the API of StaticImageElementFactory to fix some unclean
+          method names. Also added a convinience property of type 'java.awt.Image'
+          to the class.
+
+        * [BUG] NumberFieldElementFactory and DateFieldElementFactory did not set
+          the Null-String correctly. This affects the 'simple-xml' parser as well
+          as the API report definition method. This fixes BugReport #1215492.
+
+        * [BUG] The table exports did not handle the bottom and right most borders
+          of a report correctly. These borders simply disapeared. This fixes
+          Bug #1277214 and #1270744.
+
+        * [BUG] Vertical alignment did not work in the HTML exports. This fixes
+          Bug #1276626
+
+        * [BUG] XHTML styles were not fully applied to the generated content.
+          This fixes Bug #1280328.
+
+        * [BUG] Removed the 'table-layout: fixed' style attribute, as it does
+          have a negative effect with the MSIE and all other browsers seem to
+          ignore it. (Bug #1276654)
+
+        * [BUG] The HTML exports need to add no-break-spaces to empty cells,
+          if not using CSS, messed up the export. The fix alters the font size
+          to one point, and therefore minimizes the effect. (Bug #1277122).
+
+        * [BUG] Ilkka fixed the Anchor support in JFreeReport. The Anchor element
+          is now fully functional. (Bug #1293615 and #1290405)
+
+        * [BUG] The XML-Parsers replaced the content for marked report properties,
+          even if the report definition document did not specify any value for
+          them. This bug prevented to mark the 'report.name' property.
+
+        * [BUG] A bug in the TotalGroupSumQuotient-function family caused the
+          functions to return invalid results.
+
+        * [BUG] The XML parsers and writers used 'reverselandscape' as attribute
+          value for the page orientation, but the DTDs declared it as
+          'reverse_landscape'. (Bug #1297258)
+
+        * The HTML renderer now has an option to switch to proportional column
+          widths. The resulting table will consume the complete page width.
+          (Patch #1282043)
+
+        * The HTML and ExcelExports can now be used to export multiple reports
+          in a single file using the new Appending*Processor classes.
+          (Patch #1281142 and partial fix for feature request #1204087)
+
+        * BSHExpression's createInterpreter is now protected to allow subclasses
+          to modify the created instance.
+
+        * Changed the PageEvent order. PageEvents are now fired before any other
+          events are fired (but after the reportInitialized event). On pagebreaks
+          the page header and the repeated group headers will contain the same
+          computed values as the last page footer. This fixes Bug #1263817.
+
+        * More work at the JavaDoc and DocBook texts.
+
+        * It is now possible to span a report over multiple pages. For best
+          results, the elements should not cross pagebreaks. JFreeReport handles
+          that case, but the resulting output is not perfect.
+
+        * Added the StackedLayoutManager, which behaves like a Swing-Box-Layout.
+          Use this within a band to allow dynamic elements to push other elements
+          below the used space of the dynamic element. See the StackedLayoutDemo
+          for an example.
+
+        * The SimpleXML-Parser is now able to assign a global stylesheet to
+          the generated elements. The new attribute 'styleClass' must contain
+          the name of the stylesheet. If the stylesheet does not exist, it will
+          be created and can be modified after the parsing is complete.
+
+        * The demos have been restructured. Every demo now has a longer text
+          describing the purpose and structure of the demo.
+
+        * All deprecated classes have been removed.
+
+        * The Report configuration is no longer responsible for providing a
+          global configuration. The JFreeReportBoot class holds the global
+          config, which can be retrieved using
+          'JFreeReportBoot.getInstance().getGlobalConfig()'.
+
+          Initializing the log system should be done using the properties
+          file or by querying 'JFreeReportBoot.getInstance().getEditableConfig()'
+          and updating the properties there.
+
+        * Booting JFreeReport before it can be used is now mandatory. Booting
+          is done using 'JFreeReportBoot.getInstance.start()'. Without this
+          initialization, you *will* experience trouble.
+
+        * Added a switch to use either the MasterSelect command or a series of
+          single commands to define the font properties on Epson 9-pin printers.
+
+        * It is now possible to access the raw datasource (the TableModel) using
+          the system maintained report property 'report.datasource'. If the
+          property is marked, even expressions will be able to access the
+          datasource.
+
+        * The layout manager is now able to apply limited caching to dynamic
+          elements. Although still slower than static elements, this caching
+          prevents unneccessary recomputations between layouting and printing.
+
+        * Changed the Key-Binding for the Preview-Component's Next- and Previous
+          Page action to plain keystrokes. From now on, a simple PageDown or
+          PageUp is sufficient to navigate through the pages.
+
+0.8.5-5: (1-Jun-2005)
+        * [BUG] The ItemHideFunction did not reset the visible state to visible
+          after a pagebreak.
+
+        * [BUG] The include parser did not setup the EntityResolver correctly.
+          This caused trouble when working without an internet connection.
+
+        * [BUG] The Excel cell style provider created too many styles due
+          to an invalid key used for checking whether a style already exists.
+
+        * [BUG] Discovered and fixed some bugs using the 'FindBugs' tool.
+
+        * [BUG] Fixed an error condition, where an non-absolute path could cause
+          a NullPointer if the parent directory could not be resolved.
+
+        * [BUG] The XML-Parser's support for indexed function properties has
+          been fixed.
+
+        * The classloader handling is now configurable via JCommon. By default
+          the ThreadContext-classloader is used now.
+
+        * The one-to-many demo got an API-only counterpart. Noone is forced to
+          use the XML definition.
+
+        * There were some ugly bugs in the I18N report support. The I18N demo
+          is now working as expected.
+
+        * Excel reports with more than 4000 different styles to no longer break
+          the file format. JFreeReport will not create more than 4000 styles in
+          a single report (all extra styles are discarded and the cells left
+          unstyled).
+
+        * The HTML export now allows border definition in the <tr> elements.
+          This is a workaround for bugs in the Mozilla table renderer. The
+          setting is configurable using the report configuration with the
+          key 'org.jfree.report.modules.output.table.html.TableRowBorderDefinition'.
+
+0.8.5-4: (15-Apr-2005)
+        * The location of the ReportControler can now be defined from
+          within the ReportControler.
+
+        * [BUG] The TableLayouter does no longer use heuristics to compute
+          the layout. Now every layouted cell has its own TableCellBackground
+          instance - this makes computing more accurate but also more resource
+          intensive.
+
+        * [BUG] Excel-CellStyles are now applied to all cells of a region.
+          (Bug #1172423)
+
+        * [BUG] CSVContentCreator used an invalid offset and therefore did not
+          generate valid content.
+
+        * [BUG] The demo-jar classpath did not include the misc-survey module.
+
+        * [BUG] FunctionUtilties.findElement(..) and
+          FunctionUtilities.findAllElements (..) did not check the names of bands
+          and therefore did never return band references.
+
+        * [BUG] Some bugs were fixed in the include-functionality of the
+          JFreeReport XML-parsers.
+
+        * [BUG] Fixed some bugs in the SurveyScaleDemo (missing resources) and
+          SurveyScaleExpression (adding 'field' property failed).
+
+        * [BUG] DemoFrontend did not give error messages, when the start of the
+          demo failed.
+
+        * The org.jfree.report.modules.output.table.html.EmptyCellsUseCSS
+          configuration property controls how empty cells are handled. By
+          default no CSS is used (as the InternetExplorer gets confused by
+          standards). This is a follow up to Bug #1165992.
+
+        * The DEFAULT_GROUP_NAME constant of GroupList is now public. This
+          constant defines the name of the automaticly created default group.
+          That group is created to prevent an empty GroupList, if other groups
+          exist for the report, the default group might not exist.
+
+        * To help Mozilla/Firefox render generated HTML pages correctly, the
+          HtmlContentCreator now also adds border and background definitions to
+          the table row element style.
+
+        * All tables now have a ColGroup tag to define the table's column widths.
+          This way even large tables get rendered correctly even if not all data
+          is received.
+
+        * A new demo shows how to join several reports into a single report. A
+          new JoiningTableModel has been added to simplify the task of creating
+          a suitable tablemodel for that report.
+
+0.8.5-3: (25-Mar-2005)
+        * [BUG] The GUI-ExportTasks now create missing directories, if
+          necessary. The HTML-Directory Export's data directory is now
+          relative to the specified HTML file and no longer to the current
+          working directory.
+
+        * [BUG] Merging lines and backgrounds in the TableExports was invalid.
+
+        * [BUG] StaticLayoutManager's caching worked to hard and stored
+          intermediate values, which caused elements with a fixed width and
+          relative height to be way to large.
+
+        * [BUG] The 'pagebreak-before-print' and 'pagebreak-after-print' of
+           the SimpleXML DTD were inconsistent. Now all pagebreak attributes
+           use the names given above, as these attribute names have been
+           used for the group header/footer for some time. (closes #1165942)
+
+        * [BUG] TableBackground-borders with a width of '0' should not be
+          activated. Such borders must have their color set to 'null'.
+          (closes #1166296)
+
+        * [BUG] Duplicate logging of the project info can be confusing.
+          Removed the log statement from JFreeReportBoot. (closes #1166415)
+
+        * [BUG] The PDF default encoding of the module configuration was set to
+          Cp1251 (which is cyrillic) but should have been set to Cp1252 (WinAnsi)
+          (closes #1165907)
+
+        * [BUG] The output-pageable-base module did not jave the output-meta
+          jar file included in the classpath. This seems to kill the demo on
+          some systems. (closes #1168342)
+
+        * [BUG] The HTML-Export now uses the fixed table-layout alogorithm as
+          specified in the CSS-standard. Additionally, the total width of
+          the table is now specified in the table tag to help the HTML renderer.
+          Column widths are now specified using the '<col>' tag. (closes #1165992)
+
+        * [BUG] The HTML-Export does no longer generate &nbsp; for empty cells.
+          The CSS-property "empty-cells: show" is used instead. (closes #1168156)
+
+        * [BUG] In the Excel-Export row heights and cell widths were unreliable.
+          The row height are now set according to the POI documentation (1/1440th
+          of an inch as unit).
+
+          For the cell heights Arial 10 is set as default font and all cell
+          heights are computed with an assumed character width of 5 points.
+          The way how cell widths are computed is way to weird, you wouldn't
+          believe it (I still have problems to believe it).
+
+        * The Demo-Jar now uses the DemoFrontend class as Main class. This way,
+          all demos are accessible when running that jar.
+
+        * The SimpleXML format now defines a new attribute for Number and Date
+          fields to supply an explicit cell format for the Excel export. Excel
+          does not really like the Java-Formats and as there is no reliable
+          specification  for the excel format strings on the net, this is a
+          workaround to get good looking excel exports.
+
+        * Added support for report constomizations from within the Preview
+          components. A "ReportControler" can now be assigned to the preview base
+          to supply additional menus and/or a custom property editor panel.
+
+          The ReportControlerDemo demonstrates how this could be used.
+          (closes request #1162404)
+
+        * The SwingIcons demo has been changed to search for the 'jlgr-1_0.jar'
+          on the classpath, the directories containing classpath-jars or the
+          local working directory. If that fails, the user now can specify a
+          custom location for the icons.
+
+        * The PDFExportDialog now maps the UTF-8 and UTF-16 encodings to the
+          PDF Unicode encoding "Identity-H". Using the UTF-encodings directly
+          was a great way to produce reports without a single character of
+          text inside.
+
+0.8.5-2: (18-Mar-2005)
+        * [BUG] FontPath caching did not validate the cache integrity. This way,
+          some fonts might be left unregistered.
+
+        * [BUG] The image content class did not refuse bounds with a
+          width or height of zero. Such content would never be displayable
+          and should therefore be removed as early as possible.
+
+          In the same class, the image scaling code tried to use an integer
+          division to compute the scale factor. That resulted in a scale factor
+          of zero in all down-scale operations.
+
+        * [BUG] Drawing scaled image content was wrong in PDF and Graphics2D
+          targets. The HTML target did use the unscaled image size instead of
+          the computed (scaled) bounds for the <img> tag.
+
+        * [BUG] PageHeader/Footer handler of the SimpleXML parser did not
+          parse the onfirst/lastpage attribute. The ReportHeader/Footer handler
+          did not parse the (deprecated) ownpage attribute.
+
+        * Added verbose warning messages if image loading failed.
+
+        * Added deprecation warnings for the old report DTDs.
+
+        * All Export Dialogs use lazy initializations now, wherever possible.
+          This way, the preview dialogs show up a lot faster than before.
+
+0.8.5-1: (10-Mar-2005)
+        * [BUG] The PDF did not setup the first page correctly.
+
+        * [BUG] Images were not exported to PDF due to a bug in the
+          clipping setup.
+
+        * [BUG] filling shapes seemed to put the output target into an
+          invalid state; therefore an alternative way to draw and fill
+          shapes and process Drawables has been implemented.
+
+0.8.5: (4-Mar-2005)
+        * The modules are now named after their java package names and
+          correspond now with the jar file name.
+
+        * The naming schema for the jar files changed to fit the common
+          naming schema used in Maven and other OpenSource projects.
+
+        * All output target generate 'output-complete' events whenever
+          a root level band has been successfully printed.
+
+        * Most of the deprecated code has been removed. Due to the heavy
+          nature of the other changes, also many non deprecated methods
+          have changed.
+
+        * All ResourceBundles used by JFreeReport have been converted to
+          property files for better maintainability.
+
+        * The Boot process of JFreeReport now integrates into the jcommon
+          boot system; a new boot loader implementation (JFreeReportBoot)
+          provides the boot loader for this library.
+
+        * Images are no longer required to be loadable. The ImageReference
+          interface is used to define the image sizes and URLs. There is
+          no need to load the image anymore. This allows references to
+          image sources, which are not reachable for the report generator.
+
+        * Images and Drawables are now loaded using a separate factory,
+          so that Pixie is no longer a hardcoded requirement. If during
+          the boot process the Pixie library is detected, support for WMF
+          images and drawable will be available.
+
+        * All output targets use 'MetaBands' to produce their spool
+          content. This makes implementing other target less error prone.
+
+        * In the pageable output targets, the report state list is no
+          longer public. All state information is now handled by the
+          pageable report processor so that there is no way to tamper
+          with internal states.
+
+        * The PlainTextOutput targets have been completly rewritten.
+          (thanks Michael Tennes for all the debugging, patience and
+          tips and tricks).
+
+        * This implementation has now a complete ESC/P printer driver
+          and makes sure that your epson compatible matrix printers will
+          have some happy days in the Java world.
+
+        * The table targets have been completly rewritten. The old
+          implementation produced invalid results and was impossible to
+          debug.
+
+        * HTML targets now support body fragment generation. This makes
+          it possible to use the output from JFreeReport in JSP-Include
+          files.
+
+        * The RTF target is now fixed and considered stable enough to be
+          fully supported. Images are still unsupported, as this consumes
+          to much memory to be handled safely for now.
+
+        * The Excel target now allows alternate cell-format definitions.
+          This resolves issues, where Excel's internal format definitions
+          are incompatible with the Java definitions.
+
+        * The numeric and date data cells now use the original raw data
+          instead of parsing the formatted content string. This preserves
+          the full precision of the contained data.
+
+        * Functions and Expressions now use the bean-interface for their
+          configuration; the explicit use of setProperties (..) has been
+          removed in favor of the get/set methods of the Bean-API.
+
+          The parsers currently support parameters of the following types:
+          - java.math.BigDecimal
+          - java.math.BigInteger
+          - java.lang.Boolean
+          - java.lang.Byte
+          - java.lang.Character
+          - java.lang.Class
+          - java.awt.Color
+          - java.lang.Double
+          - java.lang.Float
+          - java.lang.Integer
+          - java.lang.Long
+          - java.lang.Short
+          - java.lang.String
+          as well as all primitive values and all values that define a
+          java.beans.PropertyEditor that supports the configuration using
+          PropertyEditor.getAsText() and PropertyEditor.setAsText().
+
+        * A PageDefinition object is now used instead of the
+          java.awt.print.PageFormat object. This will allow the definition of
+          printing areas that consist of multiple physical pages.
+
+          The support for larger than 1x1 page-set is untested and should be
+          considered experimental for now.
+
+        * ReportStates allow access to the current page definition object from
+          within functions. The ReportProperty "report.pageformat" should not
+          be used anymore. That property will contain the first page format.
+          Obviously, this is invalid, if more than one pageformat is defined.
+
+        * The page definition is now the only source for the page format;
+          all constructors accepting page formats have been removed from
+          the report processors.
+
+        * The ReportConnectable interface replaces the DataRowConnectable
+          to allow access to the complete report definition during the data
+          preprocessing.
+
+        * Resourcebundles for the ResourceFields are no longer loaded directly.
+          The ResourceBundleFactory from the ReportDefinition object is now
+          used as source for the ResourceBundle.
+
+        * Function and expression handling is now unified. The distinction
+          between the various function types is now classified as an internal
+          secret. For the users, functions should be not more than a special
+          kind of expressions.
+
+        * Root-Level bands can now have a fixed start position on the page.
+          This solves the various requests for the report or group footers
+          printed at the bottom of the page. Be aware that the Layout-Engine
+          will abort the report generation, if the fixed footer does not fit
+          completly on the current page. Using dynamic elements in such bands
+          can cause trouble.
+
+        * TextElements bind the encoding of their content; multiple encodings
+          can be used within a single PDF document (that feature has been
+          silently implemented in the later 0.8.4 versions, and is now ready
+          to be used officially)
+
+        * Horizontal lines no longer use the x1==x2; y1==y2 form of definition.
+          Now lines use the relative coordinates like all other elements
+          (width="100%") Special factory methods have been added to the
+          StaticShapeElementFactory so that vertical and horizontal lines can
+          be generated more easily.
+
+        * LayoutManagerCache now uses the Element's InstanceID as key for the
+          cache. This increases the performance a lot (HugeReport6: from 84 sec
+          to 35 secs). Elements that will have their sizes or position be modified
+          by the user must be marked uncachable by using the stylekey
+          ELEMENT_LAYOUT_CACHABLE set to 'false', or the layout might be invalid.
+          Dynamic elements are never cachable.
+
+        * The PDF target caches the used images. It also does no longer try to
+          encode all images as PNG files - this was completly unnecessay and
+          just stupid.
+
+        * Some minor performance improvements have been made in the stylekey handling.
+
+        * An userdefined configuration can be added to the ReportConfiguration.
+          This way JFreeReport can use other frameworks as configuration source.
+          (Based on a suggestion by 'bitstorm').
+
+          Use the 'setUserConfig' method of the ReportConfiguration class to
+          include the configuration implementation.
+
+        * The XML-parsers can be used to configure an predefined JFreeReport
+          instance. This makes it possible to supply an own JFreeReport
+          implementation to the parser..
+
+        * The PageFinished event is now handled correctly. This catches all
+          pagebreak related bugs.
+
+        * MessageFormatElements (contributed by Joerg Schaible) have been added.
+          These elements allow to join and format text in a similiar way as it
+          is possible with the TextFormatExpression.
+
+          DataRow-columns get referenced by using $(columnname) instead of
+          the parameter index of the MessageFormat format string.
+
+        * A PageOfPagesFunction (contributed by Joerg Schaible) greatly
+          reduces the complexity when defining the common 'Page x of y'
+          fields.
+
+        * All Preview components now use a factory method "protected
+          PreviewProxyBase createPreviewProxyBase ()" to create the
+          ProxyBaseImplementation. This should make it easier to replace
+          the PreviewProxyBase with a custom implementation.
+
+        * PDF- and HTML-Targets now support Anchors and Hyperlinks.
+
+        * The ElementStyleSheets have a cleaner semantic now. There are
+          two classes of stylesheets, the ones assigned directly to the
+          elements and bands and the global ones, which are created and
+          managed by the StyleSheetCollection.
+
+          Only on default parent can exist, and one cascading parent,
+          which links the elements to its parent bands. Bands do no longer
+          have two unrelated stylesheets, now they inherit their primary
+          stylesheet to their parents. This way, the inheritance change
+          can go from the root level band to the last child, allowing the
+          same inheritance chain as found in the cascading stylesheets.
+
+          The BandDefaults have been removed.
+
+        * Simple XML parser has been completly rewritten and uses now a
+          framework initially created by Peter Becker. Support for the new
+          features has been added.
+
+        * Support for Include-files added to allow to reuse common parts
+          of the report definitions (like report header/footer,
+          page header/footer, or everything else)
+
+          There is no limitation in how many reports get included or in
+          which XML-format was used as definition format.
+
+        * Support for the ImageIO API of JDK1.4 has been added to JFreeReport-Ext.
+          As soon as JFreeReport-Ext is on the classpath, the resource factory
+          will start to use these new image loaders.
+
+        * BarCode support has been added by Mimil (JFreeReport-ext).
+
+        * The servlet demos have been updated to demonstrate the use of
+          custom URLImageContainer implementations to include images in
+          StreamHtmlReports (JFreeReport-ext).
+
+        * The ExportDialogs have been redesigned to behave a little bit better.
+          All the annoying popup windows have been replaced by a less annyoing
+          status bar.
+
+        * BugFix: The layout manager did not align elements according to the
+          output target's properties. This made plain text output almost impossible.
+
+0.8.4-11: (13-Oct-2004)
+
+        * BugFix: Watermark-Band elements were not connected to the
+          datarow, causing all non-static elements to fail.
+
+        * BugFix: Selecting fonts in the PlainText-OutputTarget was not
+          supported.
+
+        * BugFix: JFreeReport now uses the latest JCommon to fix that
+          nasty recompile problem when used together with JFreeChart.
+
+        * BugFix: Changing PageFormats was buggy and caused the margins
+          of the page to be swapped.
+
+        * BugFix: The ItemMin- and ItemMaxFunction where inizialized in
+          an invalid way and therefore not working as expected.
+
+        * BugFix: The PDF-OutputTarget always created PDFs with embedded
+          fonts, defining the embedded value in the configuration had no
+          effect. To fix that, a new constructor was added which does no
+          longer set the embedded property.
+
+        * BugFix: PDF-Font creation caused OutOfMemoryErrors in case the
+          font creation failed several times before. Support for truetype
+          collections was not correctly implemented.
+
+        * A new function was added to support pagefooter printing on only
+          the last page.
+
+        * David Gilbert created a new module to support survey reports.
+          The SurveyScaleDemo shows how to use that new feature. The survey
+          module is not yet configurable with the XML report definitions,
+          this will be included in later versions of JFreeReport.
+
+        * Two new demos show, how it is possible to misuse the page-footer to
+          print a report-footer at the bottom of the last page.
+
+        * The used libraries were updated to the latest stable versions
+          available.
+
+0.8.4-10: (27-Apr-2004)
+
+        * BugFix: Excel export threw exceptions if an background
+          spanned more than one row or column
+
+        * BugFix: PDF and RTF export failed on non-embedded fonts.
+
+        * BugFix: The Simple XML parser threw exceptions if a
+          number or date-field definition did not specify a format
+          string.
+
+        * BugFix: Replacing the report object in the preview dialogs
+          could cause the next reporting to fail with an
+          "ReportInterruptedException". This was caused by not waiting
+          for the repagination worker to shutdown properly.
+
+        * BugFix: The ReportWriter caused trouble when trying to write
+          DecimalFormat objects. Fixed is contained in jcommon-0.9.3a.
+
+        * A new demo shows how to use conditional groups.
+
+        * The swedish translations were updated by Ulf Ekstr?m.
+
+        * The PlainText target now offers the option to specify an
+          initialization string, which is sent to the printer before
+          any other content is printed.
+
+        * JFreeReport now compiles on JDK 1.5 without warnings.
+
+0.8.4-9: (6-Apr-2004)
+        * BugFix: The BaseFontSupport and the PDF output target
+          did not handle iText fonts correctly resulting in a
+          memory leak.
+
+        * BugFix: An exception occured whenever a band flagged with
+          "pagebreak-after" did not fit on the previous page and was
+          printed during the page-open process
+
+        * BugFix: The TableTargets did not format row/colspanned cells
+          correctly. Credits for detecting this bug goes to mechiland.
+
+        * BugFix: The HTML Target did not close all table data elements.
+          Credits for detecting this bug goes to mechiland.
+
+        * BugFix: The paint component function did not layout given the components
+          correctly. Using non-opaque components did not produce valid results.
+
+        * BugFix: The PageFormatFactory did not correctly convert millimeters
+          into points. (2nd Try)
+
+        * BugFix: The font path detection of the itext-support was not
+          case insensitive causing wrong results on some systems.
+          Thanks mechiland for your reports.
+
+        * BugFix: Fixed some typos
+
+        * BugFix: Fixed several synchronization issues with singleton implementations
+
+        * Whether a repeating group header should be printed for a lonely
+          group footer can now be configured using the report configuration.
+
+        * ResultSetTableModel classes now try to recover from errors when
+          examining column types. Thanks, Roger Hayes for your great code.
+
+        * Introduced better support for form printing by adding a "fixed-position"
+          stylekey. Group- and report header and -footer and the itemband can now
+          be printed at a fixed position on the page.
+
+        * New Demo: Invoice demo shows a complexer invoice example.
+
+        * New Demo: Form demo shows a simple patient form and demonstrates the usage
+          of the new fixed-position key.
+
+0.8.4-8: (04-Feb-2004)
+        * BugFix: The ConfigStore module was totally messed up.
+
+        * BugFix: The PlainTextExport contained a really strange
+          implementation to handle borders. That thing did not work
+          as expected and was removed.
+
+        * BugFix: Many, many synchronization issues resolved. Most
+          of the old stuff was incomplete or just stupid. Hopefully
+          it is better now :)
+
+        * BugFix: The report footer's ownpage attribute was not handled
+          correctly in the simple xml parser.
+
+        * Dialogs now store the last user input for a certain report.
+          The input is keyed by the report's name, so it is important
+          to give every report a unique name.
+
+        * Group exception messages and SizeCalculator exceptions are
+          more chatty now.
+
+        * The BOUNDS style is no longer written when serializing reports.
+
+        * The baseURL of the ImageURL* Templates will no longer be written.
+          The baseURL points to the URL of the report definition and is
+          set by the parser.
+
+        * The PreviewComponent's toolbar has now the option to add a
+          close button to the toolbar.
+
+        * The PreviewComponent's toolbar now allows to add custom actions
+          to the toolbar. The actions must be supplied in the "customActions"
+          action map.
+
+        * The Drawable renderer of the PDF output now uses the BaseFontFactory
+          to resolve font requests.
+
+        * Whether a ProgressDialog or the progressBar is shown is configurable
+          now. The progressdialog can be configured for every export plugin;
+          the progress bar is only available in the preview frame and cannot
+          be used to monitor the export progress.
+
+0.8.4-7:
+        * BugFix: The simple parser did not handle the font encoding
+          attribute of bands correctly.
+
+        * BugFix: Hidden root level bands should not consume any space.
+
+        * BugFix: Javac 1.2 complained a lot about coding errors. The
+          errors it noticed weren't there, but the code changed to make
+          that stupid thing shut up.
+
+        * BugFix: The PageFormatFactory did not correctly convert millimeters
+          into points.
+
+        * BugFix: The HTML export created buggy code; The head-tag was not
+          closed properly and the <td> tags contained invalid widths if
+          the columns defined a colspan.
+
+        * BugFix: PageHeader and -footer now obey to both the "display-on-first-page"
+          and "display-on-last-page" flag.
+
+        * All supplied jars are now built with JDK1.2 to get rid of the
+          AbstractMethodExceptions caused by the JDK1.4 class files.
+
+        * Support for watermark-bands was added.
+
+0.8.4-6 (25-Nov-2003):
+        * BugFix: In some cases the band layout manager "lost" the
+          reference to the local LayoutSupport. This part was ugly
+          and was completly rewritten.
+
+        * BugFix: Repeating group headers were lost if the printing
+          of the group footer of that group was delayed until a new
+          page was started. The inner most group header was not printed
+          in such cases.
+
+        * BugFix: Exceptions in the SimplePageLayouter may be lost when
+          the clearCurrentEvent() method throws an other exception. This
+          was stupid coding and this method does no longer throw that
+          unnecessary exception causing all the trouble.
+
+        * The preview components are now fully configurable. The creation
+          and contents of the toolbar and menubar can now be controlled
+          using the report configuration.
+
+        * The preview base is reuseable now. The report can be redefined
+          using the setReport(..) method.
+
+        * The Total* Function now support a global computation, if no
+          group is defined. They do no longer depend on the existence
+          of the default group.
+
+        * JFreeReport now prints the current version of the Core-Module
+          during the boot process.
+
+0.8.4-5 (07-Nov-2003):
+        * BugFix: The report footer was not printed, if an automatic
+          pagebreak was done right before the printing of the footer.
+
+        * BugFix: Minor fixes in the simple parser to improve
+          the quality of the generated report definition.
+
+        * BugFix: DrawableTemplate did not implement DataRowConnectable
+          and was not available in the ext-parser.
+
+        * The export plugins of the GUI are better configurable now.
+          The report configuration can be used to define, whether a
+          plugin will appear separated from previous menu entries or
+          whether the export will be selectable from the toolbar.
+
+        * The ResultSetTableModelFactory can now be configured to map
+          either ColumnNames or ColumnLabels to the column indices.
+
+        * The PreviewBase has been reworked to be more extensible.
+
+0.8.4-4 (01-Nov-2003):
+        * BugFix: TotalItemCountFunction is now serializable and handles
+          nested groups correctly.
+
+        * BugFix: ExportPlugins had a weird way of registering themself on
+          the ReportProgressDialogs
+
+        * BugFix: SimplePageLayouter did not implement getInstance() correctly.
+
+        * BugFix: TextElement.setLineHeight tried to use Integer where Float
+          was expected causing ClassCastExceptions.
+
+        * BugFix: The PackageManager did not accept some of the version strings
+          correctly causing all export plugins to fail. Additionally all
+          warnings were surpressed.
+
+        * TextElements can now trim the textlines to make the aligned content
+          look properly.
+
+        * The simple xml parser now allows to define the reserved-literal, the
+          string which is appended when a text does not fully fit into the
+          elements bounds. Additionally, the simple parser now can define the
+          trim-text property for all text elements.
+
+        * A new demo shows the usage of ReportProperties.
+
+0.8.4-3 (22-Oct-2003):
+        * BugFix: PlainText output fixed. It was funnily messed up when
+          handling borders and was fed in the wrong way by some of the demos.
+
+        * BugFix: TotalItemCountFunction fixed; another stupid Copy&Paste
+          bug :(
+
+0.8.4-2 (19-Oct-2003):
+        * BugFix: Exceptions in the repagination did not close the progress
+          monitor.
+
+        * BugFix: InternalFrames did not repaint due to a weird use of the
+          RepaintManager in the PreviewProxyBase and some other stupid bugs.
+
+        * BugFix: Non-Embeddable fonts cause no longer fatal errors. If such
+          an font is encountered, it will be included as non-embedded font.
+
+        * BugFix: The table targets were completly broken, they have been reworked
+          and all direct and indirect causes (aka bad code) was fixed.
+
+        * BugFix: SimpleParser's subbands did not work as expected.
+
+        * BugFix: The export did not show the correct result in the dialogs status
+          bar. The synchronisation/locking schema was invalid for all exports.
+
+        * BugFix: Serialization issues fixed for various functions.
+
+        * BugFix: The line-height definition of the TextElementFactory used
+          the wrong type causing ClassCastExceptions to be thrown by the
+          stylesheet implementation.
+
+        * The preview components can now perform multiple exports at the
+          same time. Currently 10 parallel exports are possible, this will
+          be configurable later.
+
+        * The element color function does now work with all bands of an report.
+
+        * The TotalItemSumFunction can be used to precompute group results.
+
+        * Warning: (ElementVisiblitySwitch function does not work correctly;
+          this will be fixed with version 0.8.5)
+
+
+0.8.4-1:
+        * BugFix: InternalFrame was not closed properly and caused NullPointers
+          in Swing.
+
+        * BugFix: PaintComponentFunctions did draw on a black image. It is now
+          transparent instead.
+
+        * BugFix: Band.remove caused exceptions when the band was connected
+          with the report.
+
+        * BugFix: Printing values in the GroupFooter caused invalid values to
+          be printed, if an PageBreak occured between initializing and printing
+          the band.
+
+        * Added Accessor methods for common style properties as suggested
+          by 'joecole'. Band and Elements have now various getter/setter
+          methods to make the style definition easier.
+
+        * InternalFrameDemo shows how to use the PreviewInternalFrame properly.
+
+0.8.4:
+        * Table targets use some kind of repagination to prepare the layouting.
+          This makes it possible to compute the columns and styles before they
+          are written into the stream, so that we can create streaming content.
+
+        * The BaseFont-Support is now able to cache the collected fonts. This
+          reduces the startup time.
+
+        * We have modules to configure the functionality of JFreeReport ...
+
+        * HTML output can strip the file headers to make it easier to include
+          the generated content into other files.
+
+        * All code moved to org.jfree.report; all deprecated methods and classes
+          were removed. Major structural changes ... (write docs about that issue!)
+
+        * Simple ReportParser creates cleaner objects (undefined attributes are
+          no longer filled with unnecessary default values).
+
+        * The SheetName function property is more usable now.
+
+        * The GUI base module contains the option to translate the standard GUI
+          dialogs of Swing.
+
+        * The elementfactory package replaces the old ItemFactory. These factory
+          classes contain a bean like interface as well as the static methods of
+          the old ItemFactory.
+
+        * We now have templates for Rectangles and Horizontal- and Vertical line
+          shapes. This reduces the definition code size when creating the common
+          shape use-cases.
+
+        * ReportWriter creates slightly cleaner code by removing unnecessary
+          class specifications.
+
+	      * SimpleReportParser is now able to create sub bands.
+
+        * The writer supports comments and templates now. Comments are only
+          preserved in extended report formats for now.
+
+        * The excel export defines the printer setup according to the report
+          configuration or the defined page format of the report.
+
+        * The reserved-literal (the string that is appended if the text would
+          not fit into the element) can now be customized using stylessheets.
+
+        * Initializing JFreeReport is now done in a controled way using the
+          Boot class.
+
+        * Minor performance improvements to reduce the number of generated
+          objects during the report generation.
+
+        * A graphical configuration editor assists in the process of creating
+          JFreeReport configuration files.
+
+        * The XML Parser reports validation errors when a DTD is available.
+
+        * The ReportConverter got a facelifting and can now also be used to
+          import the extended reports from older versions. Changed class
+          attributes will be translated to the new namespace.
+
+        * The PDF target can now control what PDF document version will be
+          generated.
+
+0.8.3g:
+        * BugFix: XML encoding for entity 'apos' was invalid.
+
+        * BugFix: The call to the AWT print dialog is now completly
+          removed from the event-handler thread to work around a
+          Java-Bug.
+
+        * BugFix: Exceptions were not logged and caused no valid error
+          message when exporting a report with the GUI dialogs.
+
+        * BugFix: ExcelFiles were not visible from the ExcelExportDialog.
+
+        * BugFix: Image- and Shape content was not aligned in the pageable
+          output targets.
+
+        * BugFix: Another fix for the image references of the HTML target.
+          Images contained in a separate data directory were not visible.
+
+        * BugFix: The multithreading caused problems due to an missing
+          sychronize block in the worker class. This caused the worker to
+          dead-lock in some cases.
+
+        * BugFix: The preview components did not kill the worker threads
+          when being finalized. The repagination worker was not interrupted
+          if the pagination was aborted.
+
+        * The Report templates for the reference documentation were not
+          included in the JFreeReport jar file.
+
+        * The LayoutManagers now synchronizes on the Element-Tree instead of
+          the "this" reference.
+
+        * The PDF layouting bug, which appeared in some VMs has been resolved.
+          The bug was caused by an non-strict floating point implementation
+          as allowed since Java 1.2; this feature seems to have influence
+          on all layouting operations and the PDF generation. The readme file
+          contains more details.
+
+0.8.3f: (24-Aug-2003)
+        * BugFix: SwingIcons demo definition was invalid.
+
+        * BugFix: The PDF export dialog did not read the predefined
+          security settings from the report configuration.
+
+        * BugFix: Table targets did not use the properties to get
+          configured.
+
+        * BugFix: The Html Output produced garbage when writing image
+          references.
+
+        * BugFix: Expressions were not able to see the next datarow
+          and therefore useless as group arguments
+
+        * BugFix: The tabletargets do no longer have a default sheet
+          name defined. The html target will no print an automatic
+          page header anymore.
+
+        * BugFix: The preview dialog now disables all actions when
+          a long running operation is done. The tool bar floating and
+          the large icons setting can now be configured from within
+          the report properties.
+
+        * The export and pagination progress is now visible in the
+          ReportProgressDialog.
+
+0.8.3e: (16-Jul-2003)
+        * BugFix: JFreeReportResources didn't work in a Headless environment.
+          This caused weird behaviour in Tomcat. Thanks to jxmoshe for your
+          valueable hints.
+
+        * BugFix: The Pageable targets created empty pages on
+          PageableProcessor.processReport();
+
+        * BugFix: The string encoding 1251 (Windows Cyrillic) was not defined in
+          the EncodingComboBox and therefore not visible.
+
+0.8.3d: (29-Jun-2003)
+        * BugFix: All table report processors had problems with reports, that
+          had a PageFormat with a imagable size > 1000 points. This issue was
+          pure stupidity and is fixed now...
+
+        * BugFix: The ItemPercentageFunction did not initialize its private sum
+          function properly causing IndexOutOfBounds exceptions.
+
+        * BugFix: The PlainTextOutputTarget did not handle the encodings of the
+          generated text, it did encode all texts with "Cp437".
+
+        * BugFix: The PlainTextDialog and the EncodingComboBoxModel had errors
+          which prevent them from selecting encodings correctly.
+
+        * BugFix: The StyleSheetCollection now handles stylesheets with the
+          same name correctly.
+
+        * All OutputTargets use String properties now for their configuration.
+          The object interface was no great idea and caused confusion so it
+          was narrowed down to a String-only interface.
+
+          The Strings "true" and "false" are used to express boolean values.
+
+        * The iText library was updated to version 1.00; this version is now
+          able to handle the PNG-Alpha channel.
+
+0.8.3c: (19-Jun-2003)
+        * BugFix: The Area class is not able to clip lines, any attemp results
+          in an empty area. Clipping for lines is now disabled, if the output
+          target does not support clipping, the results may look weird if the
+          shape exceeds the element bounds.
+
+        * BugFix: The RTF writer does no longer support images. Using images
+          seems to cause a memory leak, so this function is disabled until a
+          fix is found.
+
+        * BugFix: The ExportDialogs now disables all plugins during the repagination.
+          PageSetup works again.
+
+        * BugFix: The demos now report all errors in a proper way.
+
+        * BugFix: The AbstractBandLayoutManager is now able to handle null content
+          without crashes.
+
+        * BugFix: The StyleSheet collection now clones all substylesheets correctly
+          and gets updated when stylesheets are added or removed from already
+          registered stylesheets.
+
+        * The RTF target now supports all fonts by using the PDF base font support
+          classes.
+
+        * The StyleSheet collection is available from all Bands and Elements, as
+          soon as the element is connected with the report. Independent elements
+          have no stylesheet collection.
+
+        * A new PreviewApplet was created to enable the direct preview of
+          Reports within a webpage. The OpenSourceDemoApplet demonstrates the
+          new component.
+
+0.8.3b:  (16-Jun-2003)
+        * BugFix: StyleSheets were not deeply cloned, so inherited stylesheets
+          were shared among all reports. This is fixed now.
+
+          Stylesheets can now be accessed directly using StyleSheetCollection,
+          which is maintained by the report definition object.
+
+        * BugFix: Printing in the PreviewFrame was no plugin and could not be
+          disabled.
+
+        * BugFix: On MacOS X the font path was not detected properly. MacOS
+          does not use the standard unix font path.
+
+        * BugFix: Menu accelerators were not defined in a platform independent way.
+          Systems without an CTRL key (like MacOS) were not able to use the
+          shortcuts).
+
+        * BugFix: Empty pages were not detected correctly, causing empty pages
+          to be printed at the end of the report under some circumstances.
+
+          The group footers pagebreak-after-print now works as expected.
+
+        * BugFix: Not all errors which may have occured during the function
+          processing were detected or even printed in the log.
+
+        * BugFix: The PlainTextOutputTarget computed wrong page sizes, which
+          caused errors when elements were printed at the bottom or the right
+          border of a page.
+
+        * BugFix: The TextContent removed leading whitespaces from the text.
+
+        * BugFix: The HTML-TableProcessor did not encode the generated content
+          properly. The content was completly invalid and did not conform to any
+          standard. The same bug was hidden in the ReportWriter.
+
+          Both classes are working now as expected.
+
+          Warning: UTF-16 encoded content is not readable by Mozilla or IE, both
+          browsers are not able to handle standard conforming UTF-16 correctly.
+
+        * BugFix: The report writer is now able to handle inherited stylesheets
+          correctly.
+
+        * BugFix: Null values in the element content do no longer cause the layouting
+          to fail. NullContent and empty content are handled correctly now.
+
+        * An EmptyReportException is now thrown when the report generation produced
+          no pages for the report.
+
+        * The StyleSheet interface is removed now, it was not used.
+
+        * The reference document generator now also generates documentation for the
+          DataSource factories.
+
+        * The XML parser now prints the location of the parse error on all exceptions.l
+
+0.8.3a : (04-Jun-2003)
+        * BugFix: Serialization works again. All functions are serializable
+          now.
+
+        * BugFix: The report writer handles subclasses correctly
+
+        * BugFix: The parser's extended report definition is working again.
+
+        * BugFix: Unclean definitions in the ReportState, Band, Element and
+          DataRow classes.
+
+        * BugFix: The excel and PDF target work again.
+
+        * BugFix: Unclean definition in Group and GroupList methods removed.
+          Groups can no longer be composed in an invalid way.
+
+        * BugFix: ReportWriter was unclean and did not handle complex stylesheet
+          definitions.
+
+        * BugFix: The parser/writer object factories did not handle inherited objects
+          correctly in some cases.
+
+        * BugFix: Generating URLs in the ReportParser was unclean.
+
+        * BugFix: ItemColumnQuotientFunction did not implement the function interface
+          causing classcast exceptions when used as function.
+
+        * We got a new Swedish translation. All fame goes to Thomas Dilts.
+
+0.8.3    : (26-May-2003)
+        * BugFix: The report states where unclean when a pagebreak was issued,
+          causing the printing and several computation functions to fail or to
+          return invalid values.
+
+          The event oder was redefined to resolve that issue. Please read
+          "migration.txt" for details on the new event order.
+
+        * BugFix: URL handling was buggy, the base URL was never set in the
+          templates.
+
+        * BugFix: NewLine characters were not handled correctly in the last
+          version. After the linebreak was done, an undisplayable newline character
+          remained in the text-line instances.
+
+        * BugFix: The repeating group header feature now repeats all marked group
+          headers, and not just the last one.
+
+        * BugFix: Wordbreaking was buggy.
+
+        * Most of the parser code moved into JCommon. We are using JCommon version
+          0.8.1; all classes of JCommon moved into the package tree under
+          org.jfree.*
+
+        * Upgraded to pixie-0.8.0. All pixie classes moved into the package tree
+          under org.jfree.*
+
+        * DTD bugs fixed.
+
+        * Modified the BuggyFontRenderer messages as these messages seemed to
+          cause confusion.
+
+        * All table output targets (CSV, HTML, Excel, RTF) have now a generic
+          configuration interface; the targets can be configured using the
+          ReportConfiguration.
+
+        * Drawable elements are officially supported now. There are no
+          drawable implementations yet (except JFreeChart :)), more support
+          is included in later versions ...
+
+        * ItemColumnQuotientFunction changed into ItemColumnQuotientExpression.
+
+        * New Translations: Slovenian, Russian, Hungarian and Dutch. Adjusted
+          the mnemonics of some translations to fit the displayed text.
+
+        * The Excel export now uses the extended data cell style capabilities
+          of POI 1.10. Numeric and Date/Time cells are no longer formatted as
+          texts, the cells contain numeric values so that you can use them in
+          formulas. In case this causes trouble, the cell format strings can
+          be redefined or this feature can be completly disabled. Please see
+          migration.txt for details.
+
+        * The licence now has an exception for using function and expression
+          implementations in non-free programms.
+
+        * Due to several iText improvements, the PDF target is now able to use
+          transparent PNG pictures and iText is now able to use all GIF files.
+
+        * The extended XML-Parser and the writer are now able to write and
+          parse generic shapes.
+
+        * The report converter GUI now displays exceptions to the user.
+
+0.8.2 : (12-Apr-2003):
+        * Important: There were fixes in the shape handling and the order of the
+          function events, please read the file migration.txt for detailed
+          information about API changes of this release.
+
+        * BugFix: Layouting was broken for band in band stacking and complex layouts.
+
+        * BugFix: SimplePageLayouter layouting was broken.
+
+        * BugFix: The event handling and pagebreaking within the SimplePageLayouter
+          was unclean and under some circumstances the row of a last page which
+          triggered a pagebreak could got lost.
+
+          The event handling is now in a better defined state: It is guaranteed, that
+          page-start events are invoked before any other report event for the page.
+          When starting a new report, the page-start event will be the first event that
+          is received. When the itemAdvanced event is triggered all previous bands are
+          printed completly and no other event is issued between the itemAdvanced and
+          the print event (unless the printing would trigger a new pagebreak).
+
+        * BugFix: Images were not printed correctly, when an image was not loaded
+          completly using an ImageObserver. The return value of Graphics2D.drawImage
+          is now used to determine whether the image must be loaded and reprinted.
+          If the image was not yet loaded, the printing process waits until the image
+          is completly loaded by the AWT.
+
+        * BugFix: When no content was generated for given bounds, the resulting null
+          content was not checked and caused NullPointerExceptions.
+
+        * BugFix: The PlainTextDialog had no CloseListener, so an attemp to close the
+          window had no effect.
+
+        * BugFix: TextLayout was buggy, if the minimum size was greater than the
+          element's maximum size.
+
+        * BugFix: The template writer was buggy.
+
+        * BugFix: Extended report definition parser had a bug in the handling of
+          the extends-tag of stylesheets.
+
+        * BugFix: Several MemoryLeaks have been fixed. The leaks were non-fatal for
+          smaller reports but killed report with more than 300 pages. The reference
+          to the JFreeReport object within the ReportStates was replaced by a smallscale
+          ReportDefinition object.
+
+          The report definition object is readonly and limits access to the bands and
+          group definitions and the report configuration. The function/expression
+          collections and the tablemodel are no longer directly available within the
+          report definition and can only be accessed indirectly by using the DataRow.
+
+        * BugFix: The excel export generated too many CellStyle-definitions. The generated
+          excel file could not be read if more than 4000 CellStyles were generated. The
+          fixed implementation fixes the caching of previously generated styles.
+          The 4000 CellStyles limitation is a hard limit imposed by MS Excel.
+
+        * "shape-element" added for the simple report definition format. The shape
+          element can be used to draw shapes retrieved from the dataRow.
+
+        * ShapeFieldTemplate added to create a easy to use "shape-element" for the
+          extended report definition profile.
+
+        * The report processing performance is heavily increased.
+
+        * LineShapes were now created correctly when using the ItemFactory.
+
+        * We have an complete french translation of the core libraries now. Thanks
+          mimil :)
+
+        * Bands now bind their own BandLayoutManagers.
+
+        * New demo: The card demo has been added to show a complexer use and the power
+          of the extended report definition format. The demo uses templates and
+          stylesheets to coordinate the appearance of several fields.
+
+          The demo can be found in the package com.jrefinery.report.demo.cards
+
+        * New demo: The PercentageDemo shows the use of NumberFields and the format
+          decimal format string of the number field.
+
+        * A new ElementColorFunction defines the color of an element depending on
+          a boolean expression.
+
+        * JFreeReport now uses iText 0.98. This iText version is incompatible with
+          the previously used iText version 0.96.
+
+        * The available encodings for the various export dialogs can now be defined
+          using a properties file. The properties file is referenced in the report
+          configuration in the Key "com.jrefinery.report.encodings.available" and
+          the key "com.jrefinery.report.encodings.file". The available key
+          can be set to "all", "none" or "file".
+
+          A sample encodings property file can be found in the file
+          "/com/jrefinery/report/jfreereport-encodings.properties". Disabling
+          unnessary encodings will speed up the initial loading of the preview dialogs.
+
+0.8.1_02 : (09-Mar-2003):
+        * BugFix: Shape handling was invalid. All Shapes were painted at position
+          (0,0) within the element, regardless what was defined for the shape.
+
+        * BugFix: The ReportWriters validity checks were buggy and caused exceptions
+          when writting Object-Descriptions.
+
+0.8.1_01 : (04-Mar-2003):
+        * BugFix: The PlainTextOutputDialog was not modal and caused trouble.
+
+        * BugFix: Adding element to a band, which already contains that element
+          caused IndexOutofBoundsExceptions.
+
+        * BugFix: The extended parser had a bug in the band handler, so that
+          elements got added twice.
+
+        * Added stricter error handling to the report processing. This can be
+          activated by setting the com.jrefinery.report.StrictErrorHandling
+          property to true. If activated, all exceptions that occur during the
+          report processing cause the report generation to fail.
+
+        * Removed the "/jfreereport.properties not found" debug message. It caused
+          confusion without supplying anything valuable.
+
+        * Updated the HTML OutputTarget so that the default Page text is printed
+          properly and Author and Title work as expected. The Html dialog is now
+          more resistent against invalid or unexpected inputs.
+
+        * Updated the README file, so that the layout restrictions are mentioned.
+          Thanks for the idea, JM Delsaux.
+
+0.8.1 : (28-Feb-2003):
+        * BugFix: Corrected many bugs in the SimplePageLayouter.
+
+        * BugFix: empty ReportProperties were not marked correctly.
+
+        * BugFix: TextLine layout was inaccurate, used java.awt.Dimension instead
+          of Dimension2D.
+
+        * BugFix: Band containing other bands were not laid out correctly.
+
+        * BugFix: PreviewPane was unusable when used directly. The report was not
+          repaginated automaticly and there was no way to trigger the repagination.
+
+        * BugFix: Generated PNG files in the PDFOutputTarget no longer use the
+          Alpha-Channel as iText doesn't seem to like it.
+
+        * BugFix: The generated PDF files did not work with GhostScript.
+
+        * BugFix: The ReportFooter handling was unclean and caused trouble.
+
+        * BugFix: The PageBreak was not handled correctly, so that sometimes bands
+          got lost after a pagebreak was done.
+
+        * BugFix: Corrected layouting calculations; using double values seem to cause
+          incorrect calculations. Switched to float values everywhere.
+
+        * BugFix: BandLayoutManager illegaly modified the values from the
+          ElementStyleSheet. This caused invalid states when a band was hidden and restored.
+
+        * BugFix: The PDFOutputTarget did not handle state restoration correctly when a
+          new page was started.
+
+        * Refactoring: All tablemodel related classes moved into a spearate package.
+          The package is expected to grow heavily during the next releases.
+
+        * Refactoring: The iText font support moved into a separate package. The
+          PDFFontFactory is now known as BaseFontFactory.
+
+        * Refactoring: The BandLayout stuff moved into a separate package as these
+          classes are used by allmost all output targets.
+
+        * Info: The First demo has been renamed to SwingIconsDemo.
+
+        * Added a main method in the JFreeReport info, so that everybody is able to
+          read the library specifications without having to install or start the
+          demo package.
+
+        * The order of fields in the group definition does no longer matter. Anyway,
+          all fields of the parent group must also be defined in the child group.
+
+        * Added a new event type: The LayoutEvent can be used to adjust INTERNAL values
+          after the layouting is completed. Do not use this event to modify the layout,
+          this can have funny results, but won't produce what you may expect.
+
+        * Added separate thread for the repagination process and the printing. The
+          PageableOutputTarget now check the Thread-state for interrupt events. If
+          the current thread gets interrupted, the report processing or repagination
+          is canceled.
+
+        * Added resource compare tool lists differences between the base
+          resource class and the localized resources to help with the translation
+          process.
+
+        * Added a line height property for text elements. This property can be used
+          to increase the space between 2 lines.
+
+        * Bands now handle the object composition correctly and check for component
+          loops.
+
+        * The ANT script can be used to checkout the latest sources from the anonymous
+          CVS repository on sourceforge.
+
+        * Added a generic DummyImplementation for the output targets. This should help
+          to reduce the repagination time.
+
+        * We now have a polish translation. Thanks Pjotr (pbzdyl).
+
+        * Font encoding and embedding can now defined separatly for all text elements.
+
+        * The ABSOLUTE_DIM stylekey was removed. This is now handled by specifying
+          a minimum size (and a maximum size if needed).
+
+        * Added dynamic element support for all content types. Image and shape elements
+          can be defined as dynamic elements to have their sizes adjusted according to
+          the contained content.
+
+        * New element template types: ResourceLabel and ResourceField use a string from
+          the data source to lookup a value in an assigned ResourceBundle.
+
+        * Added support for Scaling for Shape and Image elements. Scaling can be
+          configured to keep the original aspect ratio.
+
+        * The XML parser now uses local copies of the DTD to validate the document,
+          if an document type is specified in the XML definitions.
+
+        * Added support for Underlined and StrikeThrough font style.
+
+        * Several new report functions added by Heiko Evermann.
+
+        * A PaintComponentFunction can be used to create Images from AWT-Components.
+
+        * Added PaintComponentFunction to create images from AWT or Swing components.
+          The generated images can be used in ImageElements.
+
+        * Added a new Demo: OpenSourceDemo2.java
+
+        * The maximum band height is now limited by the page height. A band will never
+          grow over the available page size when using dynamic elements. To make a band
+          greater than the available page height, the user has to force it by defining
+          such an invalid minimum band size. This fix reduces the accidentaly generated
+          "Report-Does-Not-Proceed" Exceptions.
+
+        * Added a new Demo: LGPLDemo.java shows the automatic height limitation for oversized
+          "dynamic" elements.
+
+        * Heiko Evermann wrote an Excel-OutputTarget, which provided the base implementation
+          for several table style output targets:
+
+          Added several new OutputTargets:
+
+          - Simple XML Output
+              an educational output target to have a simple output target
+          - CSV Data-Output
+              to write the raw data from the DataRow into a CSV file
+          - CSV TableLayout Output
+              writes layouted bands and elements into a CSV file.
+          - Excel Output
+              writes Excel files using the Apache POI library.
+          - HTML Output
+              writes HTML4 and XHTML content.
+          - RTF Output
+              generates simple RTF documents
+              (implementation limited to standard fonts)
+          - PlainTextOutput
+              generates text files
+
+        * Added a new XML-parser to support extended report definitions.
+          Also implemented a writer to create XML-Definitions from JFreeReport objects.
+          The new parser can be used transparent replacement of the old implementation,
+          without any special treatment of the client application. The report definition
+          type is detected during the parsing process.
+
+        * Added a report converter to convert reports from the simple profile into
+          the extensible report definition format.
+          (com.jrefinery.report.io.ext.writer.ReportConverterGUI)
+
+        * Added a ReferenceDoc generator for the extensible report definition format:
+          (com.jrefinery.report.io.ext.ReferenceDocGenerator)
+
+        * Added support for templates to simplify the usage of DataSources and DataFilters.
+
+        * Redesigned the PreviewDialogs: All dialog implementations now share a common
+          backend. All Export-Targets are included using a PlugIn-Strucure and can
+          be activated and deactivated separatly using the ReportConfiguration.
+
+        * BugFix: Cloning was insufficient to separate functions and expression from their
+          anchestors. Added the method getInstance() to enforce a strict separation of
+          the original expression instance and the generated copy.
+
+        * Added a second properties file ("/jfreereport.properties") which overlays the
+          main property file "com/jrefinery/report/jfreereport.properties". Use this file
+          to create a global configuration without having to repack the jfreereport.jar file.
+
+        * The FileEncodings are now selectable from the PDF- and HTML dialogs.
+
+        * Patrice Rolland contributed a french translation
+
+0.8.0-3 : (07-Jan-2003):
+        * BugFix: Fixed the ReportStateList. Element were added at the wrong position, causing
+          NullPointerExceptions. Also fixed the dynamic element, if the element contained too much
+          data which would not fit on a single page, the report generation failed. Now the data
+          is cut down to the size of a single page. The LGPL-Demo shows the new behaviour.
+
+0.8.0-2 : (19-Dec-2002):
+        * BugFix: fix for a ReportFooter bug in the layoutmanagement. Printing the ReportFooter on
+          its own page caused the report generation to fail.
+
+0.8.0-1 : (16-Dec-2002):
+        * BugFix: fix for a PageHeader bug in the layoutmanagement. The bug
+          caused the pageheader to drive crazy and print strange values in the elements.
+
+0.8.0 : (13-Dec-2002):
+        * Many, many ... (repeat it several times: many) ... many lines of JavaDoc documentation.
+
+        * Added a new Demo: StraightToPDF.java: Demo for saving PDF directly - no preview
+
+        * Added a new Demo: HelloWorld.java: New (simple) demo.
+
+        * Added a new Demo: OpenSourceProjects.java
+
+        * BugFix: FontRendering is not correct when not using AntiAliasing on some JDKs.
+          A configuration setting exists to switch to an alterate font size calculation
+
+        * BugFix: PDFFontFactory did not prevent iText from caching the created fonts -> OutOfMemoryException
+
+        * BugFix: PDFDocument metadata was never added to the document (Author and Title)
+
+        * BugFix: original LineBreaking was buggy and got fixed by Aleksandr Gekht
+
+        * BugFix: DefaultTableModel creation was buggy, ReportGenerator had a NullPointer
+          on parseReport(File). Thanks to Robert Fuller for the report and the fix.
+
+        * FunctionLeveling: functions can be executed in a controled order. Functions of the same
+          depencylevel are considered independent, functions with a higher level depended.
+
+        * Dynamic TextElements are now fully supported.
+
+        * A full featured configuration interface with support for external property file
+          and system-properties added. Reports can supply local configuration settings
+          (as PDFEncoding or advanced PDF-Settings (security, author, title)
+
+        * ReportProperties can be defined in the report definition. <property-ref> tag
+          is used to mark and possibly define the property. Marked properties are treated
+          as DataRow-columns and can be queried as every other function or tablemodel column.
+
+        * PageCounting can now be customized. Start-page can be set, page counting is now
+          a Function.
+
+        * Preview frame can have a maximum-size and a preferred-size defined. The maximum
+          size is enforced.
+
+        * Logging now uses Object-parameters instead of strings for performance reasons.
+
+        * A PreviewDialog was added, as frames are not accessible from within modal
+          dialogs.
+
+        * PreviewDialog/Frame menus changed to allow the selection of Zoom-levels by
+          using the JMenu.
+
+        * Some possible memory leaks have been resolved. Most leaks occur in certain
+          Swing/AWT environments when PreviewFrames and ReportPanes are not garbage collected.
+          If you think you found another leak, report it to us (and don't forget to
+          tell us the JDK version you use).
+
+        * We have a polish translation. And there is a spanish translation as well.
+
+        * Elements can have a vertical alignment.
+
+        * LineShapeElement changed. A line is no longer extended to the full width
+          if the X values are equal and the Y values are equal. A line must be  a
+          valid shape and can then be extended to the full element dimension by
+          setting the scale-property to true.
+
+        * All Bands are able to pagebreak before or after printing. Pagebreaks on
+          empty pages are ignored. A page is empty if no content or just the pageheader
+          is printed.
+
+        * All text is now printed to the font's base line. The base line is calculated
+          manually and does not depend on the AWT anymore. Now the results are almost
+          as accurate as the iText calculations.
+
+        * The report now uses a new layouting/printing subsystem. Printing is done by
+          using a report function and is no longer bound to a specific output method.
+
+        * The dynamic feature finally works in all imaginable configurations.
+
+        * Elements are now configured using StyleSheets. There is no direct StyleSheet
+          support in the parser yet. StyleSheet can inherit settings from other
+          style sheets. Not all stylesheet settings are configurable using the classical
+          get/set methods and not all style-settings need to be used by the outputtargets.
+          StyleSheet-settings should be seen as a general constraints collection, and
+          like AWT does, not every constraint is used everywhere.
+
+        * The PDF-Dialog is now able to save the PDF without showing the dialog to the
+          user.
+
+        * Bands are able to use LayoutManager for their internal component layout.
+          Bands can be stacked into each other, the same rules as in the AWT apply.
+
+        * The report state list uses a smarter storage model. The first states are
+          now always stored as strong-references.
+
+        * JCommon-0.7.1 is used.
+
+        * removed deprecated classes and most of the deprecated functions. <*-function>
+          tags are no longer defined in the DTD, use the corresponding <*-field> elements.
+          DataElement and DataFunctionElement and their sub classes do no longer exist.
+          Use text fields and filters instead or create similiar fields using the ItemFactory.
+
+        * PageCountFunction and PageTotalFunction is now more flexible and can count
+          the pages of a certain group or can start counting at an arbitary page number.
+
+        * Functions and Expressions have dependency levels.  Higher dependency functions
+          are executed before lower dependency functions.
+
+        * There is a JPEG-Servlet in the extension package. This servlet generates
+          JPEG-Files for every page of an report.
+
+0.7.6 : (07-Sep-2002):
+
+        --- A new Library is needed: bsh.jar from www.beanshell.org ---
+
+        * Downport to JDK 1.2.2, requires a Pixie-Update from the CVS; JFreeReport should
+          now work in Visual Age for Java 3.5 without any patching.
+
+        * PDF supports security and encryption (40bit & 128bit keys). The password for the example
+          is "user" and "owner" for the user- and the ownerpassword.
+
+        * An extended and more comportable Save-Dialog for PDF-Files exists
+
+        * Expressions exist as a way to implement stateless lightweight
+          functions. Expressions do not maintain a state and refer only
+          the current datarow.
+
+        * The BSHExpression can be used to include the expressions sourcecode
+          in the report definition. This enables a
+
+        * DataRows are used to unify the access to the different datasources
+          as functions, expressions and the tablemodel.
+
+        * Bands can be set invisible, invisible bands are not printed and
+          consume no space.
+
+        * Band height of "-100" is now interpreted as "full page height available".
+          In the XML-definitions this can be expressed by setting the pageheight to "100%"
+
+        * Rectangle-Elements support drawing, so that an unfilled border can
+          be drawn
+
+        * After Parsing the report the source filename and the contentbase
+          are stored as report properties.
+
+        * The DefaultPageFormat can be defined in the report definitions <report>-tag
+
+        * All Strings are cut down to the length of the element. If a string is too
+          long to fit into the field, the string is cut down on word boundry.
+
+        * Bug: PreviewFrame was not being GarbageCollected, if dispose() or removeNotify() was
+          not called. Added call to dispose when the frame is hidden.
+
+        * Bug: Drawing on G2OutputTarget was buggy, aligment was inaccurate
+
+        * Bug: FontSize for G2OutputTarget was not calculated correctly
+
+        * Bug: ReportPane.setError was buggy
+
+        * Bug: ReportState.isProceeding was useless
+
+        * Bug: Fonthandling for default fonts fixed in PDF-Target
+
+        * Bug: Unicode support was not working in PDF-mode
+
+        * Bug: some GIF Images not recognized
+
+        * Bug: ClassLoader changed for use in servlet environment
+
+        * Bug: Mutiline-Text fixed
+
+        * Bug: Cloning fixed
+
+        * Bug: An Empty (0 rows) tablemodel caused a single all-elements-null row to be printed. Fixed,
+          now the headers and then the footers are printed without an ItemBand between headers and footers
+          in that case.
+
+        * Bug: WMF-Support in Pixie-Lib: The WmfImageProducer needed a huge amount of RAM to work on
+          complex images, now the image production process uses multiple scanlines to create the image
+          resulting in lower resource usage.
+
+0.7.5 : (21-Jul-2002):
+        * DTD updated to contain the latest elements
+
+        * Bug: ReportFunctions are now evaluated before the result is printed
+
+        * Bug: WaitingImageObserver deadlock fixed
+
+        * Bug: Nullpointers on empty graphic fixed
+
+        * Bug: Corrected function behaviour when the tablemodel contains no data
+
+        * Bug: Reportproperties set in the JFreeReport object got lost when a report is started
+
+        * A new example (first.xml) which is used in the documentation
+
+        * Most classes now implement the serializable and clonable interfaces
+
+        * TextElement simplified
+
+        * ImageElement/ImageFunctionElement updated
+
+        * Removed JUNIT tests from base package. The tests can be found in
+          the extension project.
+
+        * A new mode exists on report processing, called a prepare run. During this run,
+          the report is repaginated and the reentry points for the ReportStateList are
+          created. Function-results computed in this state can be reused during the real
+          report processing. This leads to 2 new functions to demonstrate the posibilities:
+
+        * 2 new functions ItemPercent and TotalSum
+          TotalSum summarizes a group in the prepare run so that the total sum
+          for that group is available in the group header.
+
+0.7.4 : (10-Jun-2002):
+        * A bug in PDFFontFactory crashed the programm in linux
+
+        * jcommon-0.6.2.jar is now included in the package. JCommon
+          changed the name of an used class, so you have to use jcommon-0.6.2
+          instead of one of the previous versions.
+
+0.7.3 : (09-Jun-2002):
+        * PreviewPane has a property to enable/disable the painting of the
+          border
+
+        * PreviewFrame's toolbar floating is controled by a property
+
+        * PDFTarget uses the truetype fonts of the system. These fonts have
+          to be registered to the FontFactory in order to be used.
+          Registration can be done by feeding Directories or files into the
+          PDFOutoutTarget.FontFactory or by letting the factory search the
+          fonts by ifself by setting the SystemProperty
+          "com.jrefinery.report.targets.PDFOutputTarget.AUTOINIT" to "true"
+
+        * PDFTarget is able to do unicode. The encoding is controled by the
+          system property
+          "com.jrefinery.report.targets.PDFOutputTarget.ENCODING"
+          and defaults to windows "Cp1252" (WinANSI). Set this property to
+          "Identity-H" to enable HorizontalUnicode writing (see
+          PDFOutputTarget.setEncoding() and the iText documentation for more
+          information on that)
+
+        * PreviewFrame has improved navigation (Goto first, last, or Page#)
+
+        * A statusbar for the PreviewPane displays total and current pages
+
+        * A demo with 200.000 rows is added to show what JFR is able to do
+
+        * Truetype-Fonts are now embedded in PDF
+
+        * Support for generic shapes is included
+
+        * a new Element (RectangleShapeElement) for filled colored boxes
+
+        * all TextElement-Inheritants have been replaced by the filtering
+          interface in com.jrefinery.report.filter. The deprecated classes in
+          the main package should no longer be used. Use the ItemFactory to
+          create the TextElement with correct filters attached.
+
+        * A new function (ElementVisibilitySwitch) shows how to control the
+          visiblity of elements at runtime.
+
+        * The parser has a better structure and can be easier customized
+          using inheritance.
+
+        * All TextElements are now able to perform a linebreak if the text
+          is too long to fit on the line and if there is space for more than
+          one line.
+
+        * Reports are repaginated before printing, Repagination moved into
+          JFreeReport. A new ReportState property (isPrepareRun()) can be
+          used to query whether this is a repagination run.
+
+        * The total number of pages is stored in the report properties
+          (using key "report.pagecount")
+
+        * An exception dialog informs the user when errors occur. A stacktrace
+          can be viewed in this dialog if wanted.
+
+        * ReportProperties are now bound to the ReportStates, not the report,
+          and shared among all ReportStates derived from the StartState.
+          A repagination run for printing/saving will no longer affect other
+          prepared reports.
+
+        * UI improvements
+
+        * removed ReportStateConstants interface and the constants for the
+          action commands in JFreeReportConstants.
+
+        * All classes have at least basic documentation.
+
+        * All UserInterface strings are localized. Localisations for
+          english and german exist.
+
+
+        Bugs fixed:
+        * ReportState did not initialize the ReportProperties correctly
+
+        * ReportState caused a OutOfMemoryError on huge reports
+
+        * the default PageFormat is passed from the JFreeReport-object into the
+          PreviewFrame.
+
+        Still to do:
+
+        * JUnitTests
+
+0.7.2a: (15-May-2002) Just a small fix as long as the code is fresh.
+        * No more NullPointer if the DataModel contains null
+        * values. Functions can no longer disrupt the report processing by
+          throwing Exceptions.
+        * All text elements have a property "nullstring" to define a String
+          which will replace all Null-Values for this element's or function's
+          value. Thanks go to Thomas Rynne for this inspiration.
+        * Fixed Bug: The ImageReference did not fill its sourceURL, so printing
+          images to pdf targets always failed.
+
+0.7.2 : (14_May-2002) This release is the result of a code review. Most
+        classes have been simplified and hardened. Unnessecary import
+        statements have been removed, so every class has changed. Please
+        look at the classes ChangeLog to see real changes.
+
+        * Important: Please make sure you have the Pixie-Library included,
+          or ImageReference/ImageElement will not work. The Pixie-Library
+          is included in JFreeReport's repositiory and release directory.
+
+        * All complex constructors have been removed. For every element
+          exists a defaultConstructor. All properties can be accessed by
+          accessor functions.
+
+        * From now on a report is always completly initialized. Such a
+          report has no null-value bands or groups. A report is guaranteed
+          to have at least one group.
+
+        * Groups have to be fully qualified. A sub-group has to include all
+          fields from its parent. So if you define group "Continents" and
+          a subgroup of "Countries" you have to declare
+
+          <groups>
+            <group name="Continents">
+              <fields>
+                <field>Continient</field>
+              </fields>
+            </group>
+            <group name="Countries">
+              <fields>
+                <field>Continient</field>
+                <field>Countries</field>
+              </field>
+            </group>
+          </groups>
+
+         for the report to work correctly. See example2.xml for a complete
+         report definition.
+
+       * ReportHeader, ReportFooter and GroupHeaders may trigger a pageBreak
+         before they are printed.
+         See example3.xml for details.
+
+       * Line-Elements now recognize the colors-attribute.
+
+       * PreviewPane has been moved to its own package. The actions
+         now are abstract to ease up integration of the preview pane in
+         other programms.
+
+       * ReportState is much smarter now. Transition from a state to another
+         is now done by returning a instance of ReportState, which handles
+         all state specific actions.
+
+       * The function interface has been improved. All function get references
+         to the report definition and the current report state.
+
+       * Bugfixes:
+
+         - LastRowMissingBug reported by Steven Feinstein is fixed
+         - Multiple data elements can now be added to a band refering to
+           the same table model column
+         - no more NullPointer if no ItemBand or no group defined.
+
+0.7.1 : (24-Apr-2002) A DTD exists for the default report parser, support
+        for images, multilined text, and some updates to the PreviewFrame.
+        JFreeReport includes a modified version of Pixie to support the
+        wmf-file format.
+
+0.7.0 : (8-Mar-2002) Reports can now be saved to PDF format using the
+        iText PDF generator (http://www.lowagie.com/itext/).
+        Integrated code contributed by Thomas Morgner including report
+        functions, XML report definitions and various bug fixes.
+        JFreeReport no longer user ANTLR-parsed report definitions.
+
+0.6.0 : (8-Feb-2002) A minor update to ensure compatibility with the
+        JCommon Class Library.
+

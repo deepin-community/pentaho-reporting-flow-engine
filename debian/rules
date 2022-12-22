@@ -1,0 +1,36 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# Build 
+# Choose the VM
+export JAVA_HOME ?= /usr/lib/jvm/default-java
+export JAVA=$(JAVA_HOME)/bin/java
+export JAVAC=$(JAVA_HOME)/bin/javac
+export CLASSPATH=$(JAVA_HOME)/jre/lib/rt.jar:.:/usr/share/java/libbase.jar:/usr/share/java/libserializer.jar:/usr/share/java/libformula.jar:/usr/share/java/liblayout.jar:/usr/share/java/libxml.jar:/usr/share/java/libloader.jar:/usr/share/java/commons-logging.jar
+
+export CURDIR=$(shell pwd)
+export SRCDIR=$(CURDIR)
+export LIBRARY=flow-engine
+export VERSION=0.9.4
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	if [ ! -d lib ]; then mkdir lib; fi
+	ant jar
+	ant javadoc
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -f $(LIBRARY)-$(VERSION).jar
+	rm -rf build
+
+override_dh_auto_install:
+	install -m 644 build/lib/flow-engine.jar \
+	debian/libpentaho-reporting-flow-engine-java/usr/share/java/$(LIBRARY)-$(VERSION).jar
+	ln -s $(LIBRARY)-$(VERSION).jar debian/libpentaho-reporting-flow-engine-java/usr/share/java/$(LIBRARY).jar
+	jh_classpath -plibpentaho-reporting-flow-engine-java --classpath="/usr/share/java/jcommon.jar /usr/share/java/itext.jar /usr/share/java/poi.jar /usr/share/java/libserializer.java /usr/share/java/libformula.jar /usr/share/java/flute.jar /usr/share/java/libfonts.jar /usr/share/java/liblayout.jar /usr/share/java/libloader.jar /usr/share/java/libxml.jar /usr/share/java/sac.jar /usr/share/java/librepository.jar /usr/share/java/sac.jar" debian/libpentaho-reporting-flow-engine-java/usr/share/java/$(LIBRARY)-$(VERSION).jar
+	jh_depends

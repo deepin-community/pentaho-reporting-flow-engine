@@ -1,0 +1,599 @@
+<?xml version="1.0"?>
+
+<xsd:schema version="0.9"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://jfreereport.sourceforge.net/namespaces/reports/flow"
+            targetNamespace="http://jfreereport.sourceforge.net/namespaces/reports/flow">
+  <xsd:annotation>
+    <xsd:documentation>
+      This schema describes the format of the flow report definitions in
+      JFreeReport. This document is aimed for the JFreeReport 0.9 release.
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:element name="name" type="xsd:string"/>
+  <xsd:attribute name="formula" type="xsd:string"/>
+  <xsd:attribute name="initial" type="xsd:string"/>
+
+  <xsd:attribute name="encoding" default="text">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NMTOKEN">
+        <xsd:enumeration value="base64"/>
+        <xsd:enumeration value="text"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+
+  <xsd:element name="property-definition" abstract="true">
+    <xsd:complexType mixed="true">
+      <xsd:annotation>
+        <xsd:documentation>
+          A property is a named entity used in Expressions and the configuration
+          definition.
+
+          If the encoding is set to 'base64', it is assumed, that
+          the content of this property is a base64 encoded serialized java-object.
+          If the encoding is set to 'text' (the default), the resulting string
+          will be used to build the object.
+
+          The 'class' attribute will be ignored for 'base64' encoded serialized
+          content.
+        </xsd:documentation>
+      </xsd:annotation>
+      <xsd:complexContent>
+        <xsd:restriction base="xsd:anyType">
+          <xsd:sequence>
+            <xsd:element ref="property"/>
+          </xsd:sequence>
+          <xsd:attribute name="name" type="xsd:string"/>
+          <xsd:attribute ref="class" use="optional"/>
+          <xsd:attribute ref="encoding"/>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="property" substitutionGroup="property-definition">
+    <xsd:annotation>
+      <xsd:documentation>
+        A property is a named entity used in Expressions and the configuration
+        definition.
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+
+  <xsd:attribute name="class" type="xsd:string"/>
+
+  <xsd:element name="attribute">
+    <xsd:annotation>
+      <xsd:documentation>
+        An attribute is a document format specific entity.
+
+        The 'class' attribute is required if the content is not base64 encoded.
+        If it is not given, a String value is assumed.
+
+        A namespace-uri is required. If no namespace uri is given, the
+        element's namespace is used instead.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:restriction base="xsd:anyType">
+          <xsd:attribute name="name" type="xsd:string" use="required"/>
+          <xsd:attribute name="namespace-uri" type="xsd:string"/>
+          <xsd:attribute ref="class" default="java.lang.String" use="optional"/>
+          <xsd:attribute ref="encoding"/>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="style-property">
+    <xsd:annotation>
+      <xsd:documentation>
+        A style-property defines a single style item. Each report-element also
+        supports the 'style' attribute, which defines the style properties using
+        the text format defined by the CSS3 standard.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType mixed="true">
+      <xsd:simpleContent>
+        <xsd:extension base="xsd:string">
+          <xsd:attribute name="name" type="xsd:string"/>
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="expression">
+    <xsd:annotation>
+      <xsd:documentation>
+        An expression computes a single value. An expression defined here can
+        be unnamed. Expressions without a name will not appear in the datarow
+        and cannot be referenced by other expressions.
+
+        Expressions can either be defined by specifying a classname or by
+        providing a formula. If a formula is given, this counts as if a
+        property named 'formula' of type string is defined in the
+        expression-class. The expression class defaults to the Formula
+        Expression.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute ref="class" use="optional"/>
+      <xsd:attribute name="name" type="xsd:string" use="optional"/>
+      <xsd:attribute ref="formula" use="optional"/>
+      <xsd:attribute ref="initial" use="optional"/>
+      <xsd:attribute name="deep-traversing" type="xsd:boolean" default="false" use="optional"/>
+      <xsd:attribute name="precompute" type="xsd:boolean" default="false" use="optional"/>
+      <xsd:attribute name="preserve" type="xsd:boolean" default="false" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:attribute name="style-key" type="xsd:string"/>
+
+  <xsd:element name="style-expression">
+    <xsd:annotation>
+      <xsd:documentation>
+        A style expression computes a single style value. StyleExpressions
+        cannot be named expressions.
+
+        Expressions can either be defined by specifying a classname or by
+        providing a formula. If a formula is given, this counts as if a
+        property named 'formula' of type string is defined in the
+        expression-class. The expression class defaults to the Formula
+        Expression.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute ref="class" use="optional"/>
+      <xsd:attribute ref="style-key" use="required"/>
+      <xsd:attribute ref="formula" use="optional"/>
+      <xsd:attribute ref="initial" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="attribute-name" type="xsd:string"/>
+  <xsd:element name="attribute-namespace-uri" type="xsd:string"/>
+
+  <xsd:element name="attribute-expression">
+    <xsd:annotation>
+      <xsd:documentation>
+        An attribute expression computes a single attribute value.
+        AttributeExpressions cannot be named expressions.
+
+        Expressions can either be defined by specifying a classname or by
+        providing a formula. If a formula is given, this counts as if a
+        property named 'formula' of type string is defined in the
+        expression-class. The expression class defaults to the Formula
+        Expression.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="attribute-name" minOccurs="1" maxOccurs="1"/>
+        <xsd:element ref="attribute-namespace-uri" minOccurs="1" maxOccurs="1"/>
+        <xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute ref="class" use="optional"/>
+      <xsd:attribute ref="formula" use="optional"/>
+      <xsd:attribute ref="initial" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="display-condition">
+    <xsd:annotation>
+      <xsd:documentation>
+        A display condition is an expression that evaluates to 'true', if the
+        element should be displayed. All other values count as 'false' effectivly
+        hiding the element.
+
+        The display-condition only affects the output. Even if the display
+        condition evaluates to false, the element will be processed and any
+        computation defined for the element will be performed.
+
+        Expressions can either be defined by specifying a classname or by
+        providing a formula. If a formula is given, this counts as if a
+        property named 'formula' of type string is defined in the
+        expression-class. The expression class defaults to the Formula
+        Expression.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute ref="class" use="optional"/>
+      <xsd:attribute ref="formula" use="optional"/>
+      <xsd:attribute ref="initial" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:attribute name="virtual" type="xsd:boolean"/>
+  <xsd:attribute name="enabled" type="xsd:boolean"/>
+  <xsd:attribute name="style" type="xsd:string"/>
+
+
+  <xsd:complexType name="element-type">
+    <xsd:complexContent>
+      <xsd:restriction base="xsd:anyType">
+        <xsd:sequence>
+          <xsd:element ref="expression" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element ref="style-expression" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element ref="style-property" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element ref="attribute-expression" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element ref="display-condition" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute ref="virtual"/>
+        <xsd:attribute ref="enabled"/>
+        <xsd:attribute ref="style"/>
+      </xsd:restriction>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:element name="element" abstract="true">
+    <xsd:annotation>
+      <xsd:documentation>
+        The element type cannot be used directly. Like its java counterpart,
+        it is an abstract type. However, it is the base for all other element
+        types.
+
+        The style attribute is mapped into an attribute definition. Whether it
+        is interpreted depends on the context of the element. For most report
+        elements, this will have no effect at all (as report elements are not
+        handed over to LibLayout. Content-Elements are the only known exception.).
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:restriction base="element-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="value-expression">
+    <xsd:annotation>
+      <xsd:documentation>
+        A value expression is responsible to produce displayable content.
+        This expression type cannot be a named expression.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute ref="class" use="optional"/>
+      <xsd:attribute ref="formula" use="optional"/>
+      <xsd:attribute ref="initial" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="content" substitutionGroup="element">
+    <xsd:annotation>
+      <xsd:documentation>
+        The content element is the one that transfers data from the datasource
+        to the output stream. There are three different types of data accepted:
+
+        * Nodes: Structural information is processed, as if the element was an
+          direct child of the content element. Use this to generate report
+          definitions on the fly. Like any strong magic, this can hurt if used
+          in the wrong way.
+
+          Recognized HTML or any other document content is processed by this
+          handler as well.
+
+        * Text: If Strings are given, the text is added as if the text was a
+          TextNode.
+
+        * Anything else: .. Is passed to libLayout hoping that someone there is
+          able to handle the object. Passing anything other than Text, Images
+          or Drawables will certainly have not the desired effect.
+
+          Dates and Numbers are treated as special kind of text. LibLayout
+          defines style properties to specify formats for these objects.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="element-type">
+          <xsd:choice>
+            <xsd:element ref="value-expression" minOccurs="1"/>
+          </xsd:choice>
+          <xsd:attribute name="format" type="xsd:string" use="optional"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:attribute name="operation">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NMTOKEN">
+        <xsd:enumeration value="mark"/>
+        <xsd:enumeration value="recall"/>
+        <xsd:enumeration value="advance"/>
+        <xsd:enumeration value="done"/>
+        <xsd:enumeration value="commit"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+  <xsd:element name="operation-before">
+    <xsd:complexType>
+      <xsd:attribute ref="operation"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="operation-after">
+    <xsd:complexType>
+      <xsd:attribute ref="operation"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:attribute name="repeat" type="xsd:boolean"/>
+
+  <xsd:complexType name="section-type">
+    <xsd:complexContent mixed="true">
+      <xsd:extension base="element-type">
+        <xsd:sequence>
+          <xsd:element ref="operation-before" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element ref="operation-after" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element ref="content"/>
+            <xsd:element ref="section"/>
+            <xsd:element ref="detail-section"/>
+            <xsd:element ref="out-of-order-section"/>
+            <xsd:element ref="page-header"/>
+            <xsd:element ref="page-footer"/>
+            <xsd:element ref="group"/>
+            <xsd:element ref="sub-report"/>
+            <xsd:any/>
+          </xsd:choice>
+        </xsd:sequence>
+        <xsd:attribute ref="repeat"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:element name="section" substitutionGroup="element">
+    <xsd:annotation>
+      <xsd:documentation>
+        A section is a container to hold other elements. Sections allow limited
+        influence over the data flow by specifying the 'operation-before' and
+        'operation-after' elements. Sections can be repeatable.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType mixed="true">
+      <xsd:complexContent>
+        <xsd:restriction base="section-type"/>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="detail-section" substitutionGroup="section"/>
+
+  <xsd:element name="out-of-order-section" substitutionGroup="section">
+    <xsd:annotation>
+      <xsd:documentation>
+        An out-of-order section defines a special band, which is printed outside
+        the normal document flow. Page headers and footers are specific examples
+        for this kind of elements.
+
+        An output target implementation is not required to understand or to
+        honor out-of-flow content. If the attribute 'print-inflow' is set to
+        'true' the same content is also copied into the normal document flow.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="section-type">
+          <xsd:attribute name="role" type="xsd:string"/>
+          <xsd:attribute name="print-inflow" type="xsd:boolean"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="page-header" substitutionGroup="section">
+    <xsd:annotation>
+      <xsd:documentation>
+        The page-header is a specific out-of-order band with the role hard-wired
+        to 'page-header' and a print-inflow value of 'false'.
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+
+  <xsd:element name="page-footer" substitutionGroup="section">
+    <xsd:annotation>
+      <xsd:documentation>
+        The page-footer is a specific out-of-order band with the role hard-wired
+        to 'page-footer' and a print-inflow value of 'false'.
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+
+  <xsd:element name="grouping-expression">
+    <xsd:annotation>
+      <xsd:documentation>
+        A grouping expression is a boolean expression, which defines whether a
+        group's content gets repeated.
+
+        Grouping-expressions cannot be named expressions.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute ref="class" use="optional"/>
+      <xsd:attribute ref="formula" use="optional"/>
+      <xsd:attribute ref="initial" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="group" substitutionGroup="section">
+    <xsd:annotation>
+      <xsd:documentation>
+        A group is a special repeating structure. A group repeats as long as
+        the grouping condition of this and all parent groups evaluates to
+        true.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="section-type">
+          <xsd:all>
+            <xsd:element ref="grouping-expression"/>
+          </xsd:all>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="query" type="xsd:string"/>
+
+  <xsd:complexType name="report-definition-query">
+    <xsd:complexContent mixed="true">
+      <xsd:extension base="section-type">
+        <xsd:all>
+          <xsd:element ref="query"/>
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="report-definition-type">
+    <xsd:complexContent mixed="true">
+      <xsd:extension base="report-definition-query">
+        <xsd:sequence>
+          <xsd:element ref="operation-before" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element ref="operation-after" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+
+
+  <xsd:element name="configuration">
+    <xsd:annotation>
+      <xsd:documentation>
+        Configures the report using the report configuration collection.
+
+        This allows to tweak the report processing in various ways and is the
+        primary method to specify default properties for the export methods.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="property" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType mixed="true">
+            <xsd:simpleContent>
+              <xsd:extension base="xsd:string">
+                <xsd:attribute name="name" type="xsd:string"/>
+              </xsd:extension>
+            </xsd:simpleContent>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:attribute name="href" type="xsd:anyURI"/>
+
+  <xsd:element name="datasource">
+    <xsd:complexType>
+      <xsd:attribute ref="href" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="stylesheet">
+    <xsd:annotation>
+      <xsd:documentation>
+        A stylesheet definition references an external stylesheet
+        file (in CSS3 format). The element has the same function as the
+        HTML-Link element (which is not used, as this is a report and no
+        HTML file.)
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType mixed="true">
+      <xsd:attribute ref="href" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="inline-stylesheet" type="xsd:string">
+    <xsd:annotation>
+      <xsd:documentation>
+        This includes the style sheet definition as character data.
+        This is equal to HTML's style-tag.
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+
+  <xsd:element name="report" substitutionGroup="section">
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="report-definition-type">
+          <xsd:sequence>
+            <xsd:element ref="configuration" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="datasource" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="stylesheet" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element ref="inline-stylesheet" minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+
+    </xsd:complexType>
+
+  </xsd:element>
+
+  <xsd:element name="import-parameter">
+    <xsd:annotation>
+      <xsd:documentation>
+        An input parameter definition. The column specified by 'name' of the
+        master report is mapped into the subreport. If an alias is given, the
+        parameter will be mapped by that name instead by its original name.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="name" type="xsd:string" use="required"/>
+      <xsd:attribute name="alias" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="export-parameter">
+    <xsd:annotation>
+      <xsd:documentation>
+        An output parameter definition. The column specified by 'name' of the
+        subreport report is exported into the master report. If an alias is given, the
+        parameter will be mapped by that name instead by its original name.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="name" type="xsd:string" use="required"/>
+      <xsd:attribute name="alias" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="sub-report" substitutionGroup="section">
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="report-definition-type">
+          <xsd:sequence>
+            <xsd:element ref="import-parameter" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element ref="export-parameter" minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+
+</xsd:schema>

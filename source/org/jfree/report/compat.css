@@ -1,0 +1,15 @@
+/**
+ * The StyleSheet mapping for the compatibility-layer.
+ *
+ * During the report processing, the LibLayoutReportTarget adds some control
+ * attributes to help the layouter. These attributes are always added to the
+ * namespace '../namespaces/engine/flow', regardless what namespace the element
+ * itself is in.
+ */
+@namespace url(http://jfreereport.sourceforge.net/namespaces/engine/compat); /* set default namespace to HTML */
+@namespace xml url(http://www.w3.org/XML/1998/namespace);
+
+
+/**
+ * This is empty, so luckily we did not have to tweak anything yet.
+ */

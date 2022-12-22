@@ -1,0 +1,90 @@
+/**
+ * The StyleSheet mapping for the flow-parser. The flow xml report format places
+ * all control elements into the namespace '../namespaces/report/flow'.
+ *
+ * During the report processing, the LibLayoutReportTarget adds some control
+ * attributes to help the layouter. These attributes are always added to the
+ * namespace '../namespaces/engine/flow', regardless what namespace the element
+ * itself is in.
+ */
+@namespace url(http://jfreereport.sourceforge.net/namespaces/reports/flow); /* set default namespace to HTML */
+@namespace xml url(http://www.w3.org/XML/1998/namespace);
+@namespace report url(http://jfreereport.sourceforge.net/namespaces/engine);
+
+/**
+ * The quoting of the attribute's name constant is an intentional violation
+ * of the CSS standard. This forces the 'flute' parser to return the attr(..)
+ * function as function object, which enables us to interpret the type
+ * parameter.
+ */
+
+resource-node {
+  content: attr("report|content", url);
+  display: inline;
+}
+
+external-node {
+  content: attr("report|content", raw);
+  display: inline;
+}
+
+content[report|content] {
+  content: attr("report|content");
+  display: inline;
+}
+
+content[report|content][report|isDate=true] {
+  content: format(attr("report|content", date), date);
+}
+
+content[report|content][report|isDate=true][format] {
+  content: format(attr("report|content", date), date, attr("format",string));
+}
+
+content[report|content][report|isNumber=true] {
+  content: format(attr("report|content", number), number, "#,##0.00");
+}
+
+content[report|content][report|isNumber=true][format] {
+  content: format(attr("report|content", number), number, attr("format",string));
+}
+
+content[report|content][report|isNumber=true][isInteger=true] {
+  content: format(attr("report|content", number), number, "#,##0");
+}
+
+content[report|content][report|isNumber=true][isInteger=true][format] {
+  content: format(attr("report|content", number), number, attr("format",string));
+}
+
+inner-stylesheet {
+  display:none;
+}
+
+stylesheet {
+  display:none;
+}
+
+query {
+  display: none;
+}
+
+configuration {
+  display: none;
+}
+
+datasource {
+  display: none;
+}
+
+group, report, sub-report, section, detail-section, page-header, page-footer {
+  display: block;
+}
+
+page-header {
+  position: running(header);
+}
+
+page-footer {
+  position: running(footer);
+}

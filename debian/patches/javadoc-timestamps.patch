@@ -1,0 +1,10 @@
+--- a/build.xml
++++ b/build.xml
+@@ -65,6 +65,7 @@
+              author="true"
+              version="true">
+        <classpath refid="classpath"/>
++       <arg value="-notimestamp"/>
+        <packageset dir="source">
+          <exclude name="org/jfree/report/modules/gui/swing/**"/>
+        </packageset>

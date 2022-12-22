@@ -1,0 +1,78 @@
+Source: pentaho-reporting-flow-engine
+Section: libs
+Priority: optional
+Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
+Uploaders: Rene Engelhard <rene@debian.org>
+Build-Depends: debhelper (>= 10),
+ default-jdk,
+ ant,
+ libbsh-java,
+ libjcommon-java (>= 1.0.10),
+ libitext-java,
+ libjakarta-poi-java,
+ libpixie-java (>= 0.8.6),
+ liblog4j1.2-java,
+ libserializer-java,
+ libformula-java, libflute-java,
+ libfonts-java (>= 0.3.2),
+ liblayout-java,
+ libloader-java,
+ librepository-java,
+ libxml-java (>= 0.8.9),
+ libsac-java,
+ docbook-utils,
+ docbook-xml,
+ libbase-java,
+ libcommons-logging-java,
+ javahelper,
+ quilt
+Standards-Version: 3.9.8
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-java/pentaho-reporting-flow-engine.git
+Vcs-Git: https://anonscm.debian.org/git/pkg-java/pentaho-reporting-flow-engine.git
+Homepage: http://www.pentaho.com/
+
+Package: libpentaho-reporting-flow-engine-java
+Section: java
+Architecture: all
+Depends: ${java:Depends}, ${misc:Depends}
+#Depends: libjcommon-java (>= 1.0.10), libitext-java, libjakarta-poi-java, liblog4j1.2-java, libserializer-java, libformula-java, libflute-java, libfonts-java (>= 0.3.2), liblayout-java, libloader-java, librepository-java, libxml-java (>= 0.8.9), libsac-java
+Conflicts: libjfreereport-java
+Provides: libjfreereport-java
+Replaces: libjfreereport-java
+Suggests: libjfreereport-java-doc
+Description: report library for java
+ Pentaho Reporting Flow Engine is a free Java report library.
+ .
+ It has the following features:
+    * full on-screen print preview;
+    * data obtained via Swing's TableModel interface
+    (making it easy to print data directly from your application);
+    * XML-based report definitions;
+    * output to the screen, printer or various export formats
+    (PDF, HTML, CSV, Excel, plain text);
+    * support for servlets (uses the JFreeReport extensions)
+    * extensive documentation in Acrobat PDF format, plus full Javadocs;
+
+Package: libpentaho-reporting-flow-engine-java-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}
+Conflicts: libjfreereport-java-doc
+Provides: libjfreereport-java-doc
+Replaces: libjfreereport-java-doc
+Description: report library for java documentation
+ Pentaho Reporting Flow Engine is a free Java report library.
+ .
+ It has the following features:
+    * full on-screen print preview;
+    * data obtained via Swing's TableModel interface
+    (making it easy to print data directly from your application);
+    * XML-based report definitions;
+    * output to the screen, printer or various export formats
+    (PDF, HTML, CSV, Excel, plain text);
+    * support for servlets (uses the JFreeReport extensions)
+    * extensive documentation in Acrobat PDF format, plus full Javadocs;
+  .
+ This package contains the Javadoc, the Manual and the Developers Guide of
+ the Pentaho Reporting Flow Engine.
+

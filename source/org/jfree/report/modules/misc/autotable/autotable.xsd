@@ -1,0 +1,86 @@
+<xsd:schema version="0.9"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://jfreereport.sourceforge.net/namespaces/reports/flow/extension/autotable"
+            xmlns:report="http://jfreereport.sourceforge.net/namespaces/reports/flow"
+            targetNamespace="http://jfreereport.sourceforge.net/namespaces/reports/flow/extension/autotable">
+  <xsd:annotation>
+    <xsd:documentation>
+      This schema describes the format of the auto-table flow extension.
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:attribute name="class" type="xsd:string"/>
+  <xsd:attribute name="style" type="xsd:string"/>
+
+  <xsd:attribute name="item" default="text">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NMTOKEN">
+        <xsd:enumeration value="name"/>
+        <xsd:enumeration value="value"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+  <xsd:element name="auto-table-content">
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:restriction base="xsd:anyType">
+          <xsd:sequence>
+          </xsd:sequence>
+          <xsd:attribute ref="item" use="required"/>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <xsd:element name="auto-table-header">
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="report:section-type">
+          <xsd:attribute ref="style" use="optional"/>
+          <xsd:attribute ref="class" use="optional"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="auto-table-footer">
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="report:section-type">
+          <xsd:attribute ref="style" use="optional"/>
+          <xsd:attribute ref="class" use="optional"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="auto-table-cell">
+    <xsd:complexType>
+      <xsd:complexContent mixed="true">
+        <xsd:extension base="report:section-type">
+          <xsd:attribute ref="style" use="optional"/>
+          <xsd:attribute ref="class" use="optional"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="auto-table">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="report:element-type">
+          <xsd:sequence>
+            <xsd:element ref="auto-table-header" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element ref="auto-table-cell" minOccurs="1" maxOccurs="unbounded"/>
+            <xsd:element ref="auto-table-footer" minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+          <xsd:attribute ref="style" use="optional"/>
+          <xsd:attribute ref="class" use="optional"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>

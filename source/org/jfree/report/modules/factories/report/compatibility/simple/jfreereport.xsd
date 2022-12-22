@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="jfreereport.xsd"
+  
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:documentation xml:lang="en">
+			Report Schema for JFreeReport version 0.8.5.
+			Initial port from DTD by:
+			Marc Batchelor
+			September 7, 2005
+			Pentaho Corporation
+		</xs:documentation>
+  </xs:annotation>
+  <xs:simpleType name="boolean">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="true"/>
+      <xs:enumeration value="false"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="fontstyle">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="plain"/>
+      <xs:enumeration value="bold"/>
+      <xs:enumeration value="italic"/>
+      <xs:enumeration value="bold-italic"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="alignmentEnum">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="left"/>
+      <xs:enumeration value="center"/>
+      <xs:enumeration value="right"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="valignmentEnum">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="top"/>
+      <xs:enumeration value="middle"/>
+      <xs:enumeration value="bottom"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="orientations">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="portrait"/>
+      <xs:enumeration value="landscape"/>
+      <xs:enumeration value="reverse_landscape"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:attributeGroup name="position">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				The position of an element is declared either relative to the last
+				defined element in the band (or (0,0) if the element is the first element),
+				or it is positioned absolute to the top left corner of the current band.
+				
+				When positioning an element be aware to take care of the elements width.
+				The next element should be placed at the absolute position x+width,
+				or the elements will overwrite each other.
+				
+				All Fontstyles default to plain and all boolean styles to false. If no font is
+				set either in Band nor in element, a compiled in default font is used.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="x" use="required"/>
+    <xs:attribute name="y" use="required"/>
+    <xs:attribute name="width" use="required"/>
+    <xs:attribute name="height" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="basicform">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				Colors are specified in HTML Syntax, so use #FFFFFF for white and #000000
+				for black when using RGB numeric values. You may also use defined named
+				constants for the color, as "black", "white" and so on.
+				
+				The constants understood by the parser are:
+				"black", "blue", "cyan", darkGray", "gray", "green", "lightGray", "magenta",
+				"orange", "pink", "red", "white", "yellow"
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="color"/>
+    <xs:attribute name="name"/>
+    <xs:attribute name="dynamic" type="boolean"/>
+    <xs:attribute name="trim-text-content" type="boolean"/>
+    <xs:attribute name="visible" type="boolean"/>
+    <xs:attribute name="layout-cachable" type="boolean"/>
+    <xs:attribute name="href"/>
+    <xs:attribute name="reserved-literal"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="fontdef">
+    <xs:attribute name="fontname"/>
+    <xs:attribute name="fontstyle" type="fontstyle"/>
+    <xs:attribute name="fontsize"/>
+    <xs:attribute name="fsbold" type="boolean"/>
+    <xs:attribute name="fsitalic" type="boolean"/>
+    <xs:attribute name="fsunderline" type="boolean"/>
+    <xs:attribute name="fsstrikethr" type="boolean"/>
+    <xs:attribute name="font-embedded" type="boolean"/>
+    <xs:attribute name="font-encoding"/>
+    <xs:attribute name="line-height"/>
+    <xs:attribute name="excel-wrap-text" type="boolean"/>
+    <xs:attribute name="alignment" type="alignmentEnum"/>
+    <xs:attribute name="vertical-alignment" type="valignmentEnum"/>
+  </xs:attributeGroup>
+  <xs:complexType name="itemelements" >
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="band" type="bandType"/>
+      <xs:element name="label" type="labelType"/>
+      <xs:element name="string-field" type="string-fieldType"/>
+      <xs:element name="resource-label" type="resource-labelType"/>
+      <xs:element name="resource-field" type="resource-fieldType"/>
+      <xs:element name="number-field" type="number-fieldType"/>
+      <xs:element name="date-field" type="date-fieldType"/>
+      <xs:element name="imageref" type="imagerefType"/>
+      <xs:element name="image-field" type="image-fieldType"/>
+      <xs:element name="imageurl-field" type="imageurl-fieldType"/>
+      <xs:element name="rectangle" type="rectangleType"/>
+      <xs:element name="line" type="lineType"/>
+      <xs:element name="drawable-field" type="drawable-fieldType"/>
+      <xs:element name="drawable-url-field" type="drawable-url-fieldType"/>
+      <xs:element name="drawableref" type="drawablerefType"/>
+      <xs:element name="shape-field" type="shape-fieldType"/>
+      <xs:element name="message-field" type="message-fieldType"/>
+      <xs:element name="anchor-field" type="anchor-fieldType"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:simpleType name="pageFormats">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="PAPER10X11"/>
+      <xs:enumeration value="PAPER10X13"/>
+      <xs:enumeration value="PAPER10X14"/>
+      <xs:enumeration value="PAPER12X11"/>
+      <xs:enumeration value="PAPER15X11"/>
+      <xs:enumeration value="PAPER7X9"/>
+      <xs:enumeration value="PAPER8X10"/>
+      <xs:enumeration value="PAPER9X11"/>
+      <xs:enumeration value="PAPER9X12"/>
+      <xs:enumeration value="A0"/>
+      <xs:enumeration value="A1"/>
+      <xs:enumeration value="A2"/>
+      <xs:enumeration value="A3"/>
+      <xs:enumeration value="A3_TRANSVERSE"/>
+      <xs:enumeration value="A3_EXTRA"/>
+      <xs:enumeration value="A3_EXTRATRANSVERSE"/>
+      <xs:enumeration value="A3_ROTATED"/>
+      <xs:enumeration value="A4"/>
+      <xs:enumeration value="A4_TRANSVERSE"/>
+      <xs:enumeration value="A4_EXTRA"/>
+      <xs:enumeration value="A4_PLUS"/>
+      <xs:enumeration value="A4_ROTATED"/>
+      <xs:enumeration value="A4_SMALL"/>
+      <xs:enumeration value="A5"/>
+      <xs:enumeration value="A5_TRANSVERSE"/>
+      <xs:enumeration value="A5_EXTRA"/>
+      <xs:enumeration value="A5_ROTATED"/>
+      <xs:enumeration value="A6"/>
+      <xs:enumeration value="A6_ROTATED"/>
+      <xs:enumeration value="A7"/>
+      <xs:enumeration value="A8"/>
+      <xs:enumeration value="A9"/>
+      <xs:enumeration value="A10"/>
+      <xs:enumeration value="ANSIC"/>
+      <xs:enumeration value="ANSID"/>
+      <xs:enumeration value="ANSIE"/>
+      <xs:enumeration value="ARCHA"/>
+      <xs:enumeration value="ARCHB"/>
+      <xs:enumeration value="ARCHC"/>
+      <xs:enumeration value="ARCHD"/>
+      <xs:enumeration value="ARCHE"/>
+      <xs:enumeration value="B0"/>
+      <xs:enumeration value="B1"/>
+      <xs:enumeration value="B2"/>
+      <xs:enumeration value="B3"/>
+      <xs:enumeration value="B4"/>
+      <xs:enumeration value="B4_ROTATED"/>
+      <xs:enumeration value="B5"/>
+      <xs:enumeration value="B5_TRANSVERSE"/>
+      <xs:enumeration value="B5_ROTATED"/>
+      <xs:enumeration value="B6"/>
+      <xs:enumeration value="B6_ROTATED"/>
+      <xs:enumeration value="B7"/>
+      <xs:enumeration value="B8"/>
+      <xs:enumeration value="B9"/>
+      <xs:enumeration value="B10"/>
+      <xs:enumeration value="C4"/>
+      <xs:enumeration value="C5"/>
+      <xs:enumeration value="C6"/>
+      <xs:enumeration value="COMM10"/>
+      <xs:enumeration value="DL"/>
+      <xs:enumeration value="DOUBLEPOSTCARD"/>
+      <xs:enumeration value="DOUBLEPOSTCARD_ROTATED"/>
+      <xs:enumeration value="ENV9"/>
+      <xs:enumeration value="ENV10"/>
+      <xs:enumeration value="ENV11"/>
+      <xs:enumeration value="ENV12"/>
+      <xs:enumeration value="ENV14"/>
+      <xs:enumeration value="ENVC0"/>
+      <xs:enumeration value="ENVC1"/>
+      <xs:enumeration value="ENVC2"/>
+      <xs:enumeration value="ENVC3"/>
+      <xs:enumeration value="ENVC4"/>
+      <xs:enumeration value="ENVC5"/>
+      <xs:enumeration value="ENVC6"/>
+      <xs:enumeration value="ENVC65"/>
+      <xs:enumeration value="ENVC7"/>
+      <xs:enumeration value="ENVCHOU3"/>
+      <xs:enumeration value="ENVCHOU3_ROTATED"/>
+      <xs:enumeration value="ENVCHOU4"/>
+      <xs:enumeration value="ENVCHOU4_ROTATED"/>
+      <xs:enumeration value="ENVDL"/>
+      <xs:enumeration value="ENVINVITE"/>
+      <xs:enumeration value="ENVISOB4"/>
+      <xs:enumeration value="ENVISOB5"/>
+      <xs:enumeration value="ENVISOB6"/>
+      <xs:enumeration value="ENVITALIAN"/>
+      <xs:enumeration value="ENVKAKU2"/>
+      <xs:enumeration value="ENVKAKU2_ROTATED"/>
+      <xs:enumeration value="ENVKAKU3"/>
+      <xs:enumeration value="ENVKAKU3_ROTATED"/>
+      <xs:enumeration value="ENVMONARCH"/>
+      <xs:enumeration value="ENVPERSONAL"/>
+      <xs:enumeration value="ENVPRC1"/>
+      <xs:enumeration value="ENVPRC1_ROTATED"/>
+      <xs:enumeration value="ENVPRC2"/>
+      <xs:enumeration value="ENVPRC2_ROTATED"/>
+      <xs:enumeration value="ENVPRC3"/>
+      <xs:enumeration value="ENVPRC3_ROTATED"/>
+      <xs:enumeration value="ENVPRC4"/>
+      <xs:enumeration value="ENVPRC4_ROTATED"/>
+      <xs:enumeration value="ENVPRC5"/>
+      <xs:enumeration value="ENVPRC5_ROTATED"/>
+      <xs:enumeration value="ENVPRC6"/>
+      <xs:enumeration value="ENVPRC6_ROTATED"/>
+      <xs:enumeration value="ENVPRC7"/>
+      <xs:enumeration value="ENVPRC7_ROTATED"/>
+      <xs:enumeration value="ENVPRC8"/>
+      <xs:enumeration value="ENVPRC8_ROTATED"/>
+      <xs:enumeration value="ENVPRC9"/>
+      <xs:enumeration value="ENVPRC9_ROTATED"/>
+      <xs:enumeration value="ENVPRC10"/>
+      <xs:enumeration value="ENVPRC10_ROTATED"/>
+      <xs:enumeration value="ENVYOU4"/>
+      <xs:enumeration value="ENVYOU4_ROTATED"/>
+      <xs:enumeration value="EXECUTIVE"/>
+      <xs:enumeration value="FANFOLDUS"/>
+      <xs:enumeration value="FANFOLDGERMAN"/>
+      <xs:enumeration value="FANFOLDGERMANLEGAL"/>
+      <xs:enumeration value="FOLIO"/>
+      <xs:enumeration value="ISOB0"/>
+      <xs:enumeration value="ISOB1"/>
+      <xs:enumeration value="ISOB2"/>
+      <xs:enumeration value="ISOB3"/>
+      <xs:enumeration value="ISOB4"/>
+      <xs:enumeration value="ISOB5"/>
+      <xs:enumeration value="ISOB5_EXTRA"/>
+      <xs:enumeration value="ISOB6"/>
+      <xs:enumeration value="ISOB7"/>
+      <xs:enumeration value="ISOB8"/>
+      <xs:enumeration value="ISOB9"/>
+      <xs:enumeration value="ISOB10"/>
+      <xs:enumeration value="LEDGER"/>
+      <xs:enumeration value="LEGAL"/>
+      <xs:enumeration value="LEGAL_EXTRA"/>
+      <xs:enumeration value="LETTER"/>
+      <xs:enumeration value="LETTER_TRANSVERSE"/>
+      <xs:enumeration value="LETTER_EXTRA"/>
+      <xs:enumeration value="LETTER_EXTRATRANSVERSE"/>
+      <xs:enumeration value="LETTER_PLUS"/>
+      <xs:enumeration value="LETTER_ROTATED"/>
+      <xs:enumeration value="LETTER_SMALL"/>
+      <xs:enumeration value="MONARCH"/>
+      <xs:enumeration value="NOTE"/>
+      <xs:enumeration value="POSTCARD"/>
+      <xs:enumeration value="POSTCARD_ROTATED"/>
+      <xs:enumeration value="PRC16K"/>
+      <xs:enumeration value="PRC16K_ROTATED"/>
+      <xs:enumeration value="PRC32K"/>
+      <xs:enumeration value="PRC32K_ROTATED"/>
+      <xs:enumeration value="PRC32K_BIG"/>
+      <xs:enumeration value="PRC32K_BIGROTATED"/>
+      <xs:enumeration value="QUARTO"/>
+      <xs:enumeration value="STATEMENT"/>
+      <xs:enumeration value="SUPERA"/>
+      <xs:enumeration value="SUPERB"/>
+      <xs:enumeration value="TABLOID"/>
+      <xs:enumeration value="TABLOIDEXTRA"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="report">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+			   A report constists of several elements, which are all optional:
+			
+			   * reportheader
+				 printed at the first page
+			
+			   * reportfooter
+				 printed on the last page
+			
+			   * a page header
+				 Printed before any content is printed to the page.
+			
+			   * a page footer
+				 printed, after the last content for the page is printed
+				 The pagefooter is always positionated at the bottom of a page,
+				 regardless how much space of the page is filled.
+			
+			   * one or more group definitions in the "groups" element
+				 If no groups are defined, a default group is created to contain
+				 all data elements of the current report.
+			
+			   * the (optional) item band. This is where the data rows are printed.
+				 If no item band is defined, only printing is disabled. All
+				 calculations are performed regardless of the appearance of the
+				 items.
+			
+			   Attributes:
+				Width  = the width of the report in Java-Printing-Units
+				Height = the height of the report
+			
+				All printing units are defined in 1/72 inches, the default printing
+				resolution on java.awt.graphics.
+			
+				minPageFormat = a predefined page format, for instance "A4" or "US-LETTER"
+			</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="configuration" type="configurationType"/>
+        <xs:element name="reportheader" type="reportheaderType"/>
+        <xs:element name="reportfooter" type="reportfooterType"/>
+        <xs:element name="pageheader" type="pageheaderType"/>
+        <xs:element name="pagefooter" type="pagefooterType"/>
+        <xs:element name="watermark" type="watermarkType"/>
+        <xs:element name="groups" type="groupsType"/>
+        <xs:element name="items" type="itemsType"/>
+        <xs:element name="functions" type="functionsType"/>
+        <xs:element name="include" type="includeType"/>
+        <xs:element name="parser-config" type="parser-configType"/>
+      </xs:choice>
+      <xs:attribute name="width"/>
+      <xs:attribute name="height"/>
+      <xs:attribute name="name"/>
+      <xs:attribute name="pageformat" type="pageFormats"/>
+      <xs:attribute name="orientation" type="orientations" default="portrait"/>
+      <xs:attribute name="leftmargin"/>
+      <xs:attribute name="rightmargin"/>
+      <xs:attribute name="topmargin"/>
+      <xs:attribute name="bottommargin"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="number-fieldType" >
+    <xs:attributeGroup ref="basicform"/>
+    <xs:attributeGroup ref="position"/>
+    <xs:attributeGroup ref="fontdef"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="fieldname" use="required"/>
+    <xs:attribute name="nullstring"/>
+    <xs:attribute name="excel-format"/>
+  </xs:complexType>
+  <xs:complexType name="labelType"  mixed="true">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  A simple label, static text that does not change. Labels define no
+				  'nullstring' as their content cannot be possibly null using a valid parser.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="basicform"/>
+    <xs:attributeGroup ref="position"/>
+    <xs:attributeGroup ref="fontdef"/>
+  </xs:complexType>
+  <xs:complexType name="string-fieldType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  A simple text field.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="basicform"/>
+    <xs:attributeGroup ref="position"/>
+    <xs:attributeGroup ref="fontdef"/>
+    <xs:attribute name="fieldname" use="required"/>
+    <xs:attribute name="nullstring"/>
+  </xs:complexType>
+  <xs:complexType name="date-fieldType" >
+    <xs:attributeGroup ref="basicform"/>
+    <xs:attributeGroup ref="position"/>
+    <xs:attributeGroup ref="fontdef"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="fieldname" use="required"/>
+    <xs:attribute name="nullstring"/>
+    <xs:attribute name="excel-format"/>
+  </xs:complexType>
+  <xs:complexType name="imagerefType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+					The image reference links an external image into the report.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="position"/>
+    <xs:attribute name="name"/>
+    <xs:attribute name="src" use="required"/>
+    <xs:attribute name="dynamic" type="boolean"/>
+    <xs:attribute name="visible" type="boolean"/>
+    <xs:attribute name="layout-cachable" type="boolean"/>
+    <xs:attribute name="scale" type="boolean"/>
+    <xs:attribute name="keepAspectRatio" type="boolean"/>
+    <xs:attribute name="href"/>
+  </xs:complexType>
+  <xs:complexType name="image-fieldType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				   The image reference links an external image into the report. This element expects an
+				   Graphics2D-Object in the datasource.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="position"/>
+    <xs:attribute name="fieldname" use="required"/>
+    <xs:attribute name="name"/>
+    <xs:attribute name="dynamic" type="boolean"/>
+    <xs:attribute name="visible" type="boolean"/>
+    <xs:attribute name="layout-cachable" type="boolean"/>
+    <xs:attribute name="scale" type="boolean"/>
+    <xs:attribute name="keepAspectRatio" type="boolean"/>
+    <xs:attribute name="href"/>
+  </xs:complexType>
+  <xs:complexType name="imageurl-fieldType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				   The image reference links an external image into the report. This element expects an
+				   URL or URL-String in the datasource.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="position"/>
+    <xs:attribute name="fieldname" use="required"/>
+    <xs:attribute name="name"/>
+    <xs:attribute name="dynamic" type="boolean"/>
+    <xs:attribute name="visible" type="boolean"/>
+    <xs:attribute name="layout-cachable" type="boolean"/>
+    <xs:attribute name="scale" type="boolean"/>
+    <xs:attribute name="keepAspectRatio" type="boolean"/>
+    <xs:attribute name="href"/>
+  </xs:complexType>
+  <xs:complexType name="rectangleType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  The rectangle is a filled rectangular area. No outline is drawn.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="position"/>
+    <xs:attributeGroup ref="basicform"/>
+    <xs:attribute name="draw" type="boolean"/>
+    <xs:attribute name="fill" type="boolean"/>
+    <xs:attribute name="weight"/>
+  </xs:complexType>
+  <xs:complexType name="resource-labelType"  mixed="true">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  A simple label, static text that does not change, the text
+				  contains a ResourceBundle key, which is looked up during the
+				  report processing.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="basicform"/>
+    <xs:attributeGroup ref="fontdef"/>
+    <xs:attributeGroup ref="position"/>
+    <xs:attribute name="nullstring"/>
+    <xs:attribute name="resource-base"/>
+  </xs:complexType>
+  <xs:complexType name="resource-fieldType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  A text field. The field data contains a ResourceBundle key,
+				  which is looked up during the report processing.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="basicform"/>
+    <xs:attributeGroup ref="fontdef"/>
+    <xs:attributeGroup ref="position"/>
+    <xs:attribute name="nullstring"/>
+    <xs:attribute name="resource-base"/>
+    <xs:attribute name="fieldname" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="lineType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  Creates a line shape element. When using relative coordinates,
+				  you should also supply a width and a height for the bounds.
+				
+				  JFreeReport will construct the bounds for the line shape using
+				  the x1, y1 coordinates and the given width or height. If no
+				  width or height is given, the missing values will be computed from
+				  the difference between x2 and x1 and y2 to y1.
+				
+				  This heuristic might fail for relative coordinates. In that case,
+				  use the alternate definition with an explicit 'width' and 'height'.
+				
+				  Line shapes will always be scaled, without preserving the aspect
+				  ratio.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="x1" use="required"/>
+    <xs:attribute name="y1" use="required"/>
+    <xs:attribute name="x2" use="required"/>
+    <xs:attribute name="y2" use="required"/>
+    <xs:attribute name="width"/>
+    <xs:attribute name="height"/>
+    <xs:attribute name="color"/>
+    <xs:attribute name="name"/>
+    <xs:attribute name="weight"/>
+  </xs:complexType>
+  <xs:complexType name="drawable-url-fieldType" >
+    <xs:attributeGroup ref="position"/>
+    <xs:attribute name="fieldname" use="required"/>
+    <xs:attribute name="name"/>
+    <xs:attribute name="href"/>
+  </xs:complexType>
+  <xs:complexType name="drawablerefType" >
+    <xs:attributeGroup ref="position"/>
+    <xs:attribute name="href"/>
+    <xs:attribute name="src" use="required"/>
+    <xs:attribute name="name"/>
+  </xs:complexType>
+  <xs:complexType name="message-fieldType"  mixed="true">
+    <xs:attributeGroup ref="basicform"/>
+    <xs:attributeGroup ref="position"/>
+    <xs:attributeGroup ref="fontdef"/>
+    <xs:attribute name="nullstring"/>
+  </xs:complexType>
+  <xs:complexType name="anchor-fieldType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  Anchors are not visible, so it makes no sense to define visual parameters.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="x" use="required"/>
+    <xs:attribute name="y" use="required"/>
+    <xs:attribute name="name"/>
+    <xs:attribute name="fieldname" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="drawable-fieldType" >
+    <xs:attributeGroup ref="position"/>
+    <xs:attribute name="fieldname" use="required"/>
+    <xs:attribute name="name"/>
+    <xs:attribute name="href"/>
+  </xs:complexType>
+  <xs:complexType name="shape-fieldType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  A generic shape field. The shape is defined in the DataRow.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="position"/>
+    <xs:attributeGroup ref="basicform"/>
+    <xs:attribute name="fieldname" use="required"/>
+    <xs:attribute name="draw" type="boolean"/>
+    <xs:attribute name="fill" type="boolean"/>
+    <xs:attribute name="weight"/>
+  </xs:complexType>
+  <xs:complexType name="bandType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  Defines a sub band. Subbands cannot generate pagebreak for now.
+				  These bands inherit the style properties of their parents.
+				
+				  If no width is specified, the width will be computed according
+				  to the elements contained in that band.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="itemelements">
+        <xs:attribute name="x"/>
+        <xs:attribute name="y"/>
+        <xs:attribute name="width"/>
+        <xs:attribute name="height"/>
+        <xs:attributeGroup ref="basicform"/>
+        <xs:attributeGroup ref="fontdef"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="configurationType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  Configure this instance of the report. You may use all defined ReportConfigurationKeys
+				  as PropertyNames. See jfreereport.properties for more details.
+				
+				  This can be used to define the PDF-FontEncoding for an Report.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="property" type="propertyType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="reportheaderType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  The reportheader can contain any band-element.
+				  The height of the report header is ignored, if the header and footer is
+				  printed on an own page.
+				
+				  As with every element container you may define default font settings
+				  for sub elements without an own font definition.
+				
+				  In an header the ownpage is translated as pagebreak_after_print,
+				  on an footer that attribute is translated to pagebreak_before_print.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="itemelements">
+        <xs:attribute name="height"/>
+        <xs:attribute name="fixed-position"/>
+        <xs:attribute name="pagebreak-after-print" type="boolean"/>
+        <xs:attributeGroup ref="basicform"/>
+        <xs:attributeGroup ref="fontdef"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="reportfooterType" >
+    <xs:complexContent>
+      <xs:extension base="itemelements">
+        <xs:attribute name="fixed-position"/>
+        <xs:attribute name="pagebreak-before-print" type="boolean"/>
+        <xs:attribute name="height"/>
+        <xs:attributeGroup ref="basicform"/>
+        <xs:attributeGroup ref="fontdef"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="pageheaderType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  The pageheader can contain any band-element. Be aware, that the
+				  page header cannot create pagebreaks. If the content in the pageheader
+				  is to large for a single page (or no other content can fit on the
+				  page after the pageheader has printed), the report processing will
+				  fail.
+				
+				  As with every element container you may define default font settings
+				  for sub elements without an own font definition.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="itemelements">
+        <xs:attribute name="onfirstpage" type="boolean"/>
+        <xs:attribute name="onlastpage" type="boolean"/>
+        <xs:attribute name="height"/>
+        <xs:attributeGroup ref="basicform"/>
+        <xs:attributeGroup ref="fontdef"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="pagefooterType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  The pagefooter should not contain dynamic elements. Be aware, that the
+				  page header cannot create pagebreaks. If the content in the pageheader
+				  is to large for a single page (or no other content can fit on the
+				  page after the pageheader has printed), the report processing will
+				  fail.
+				
+				  Dynamic elements can change their height on every event. If the element
+				  changes during a pagebreak, it can happen, that there is not enough space
+				  to print the contents of the element. Dynamic element can also influence
+				  the page break detection in an invalid way - causing pagebreak to be
+				  issued to early or to late.
+				
+				  As with every element container you may define default font settings
+				  for sub elements without an own font definition.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="itemelements">
+        <xs:attribute name="onfirstpage" type="boolean"/>
+        <xs:attribute name="onlastpage" type="boolean"/>
+        <xs:attribute name="height"/>
+        <xs:attributeGroup ref="basicform"/>
+        <xs:attributeGroup ref="fontdef"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="parser-configType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				Defines the parser properties. These properties can be used as macros
+				in the report definition, similiar to the properties used in ANT-build files.
+				If a property with the name "property" is defined, then it can be referenced
+				later with "${property}" in any attribute value or CDATA section.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="property" type="propertyType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="watermarkType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  The watermark element is printed before any other element is
+				  printed on a new page. That band can consume the complete space
+				  of the page - it will never trigger a pagebreak.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="itemelements">
+        <xs:attribute name="height"/>
+        <xs:attributeGroup ref="basicform"/>
+        <xs:attributeGroup ref="fontdef"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="groupsType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  The tag encapsulates all groups. This tag helps to keep parsing
+				  simple. If no groups are defined, a default group is created and
+				  contains all elements of the report datarow
+			</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="group" type="groupType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="groupType" >
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="groupheader" type="groupheaderType"/>
+      <xs:element name="groupfooter" type="groupfooterType"/>
+      <xs:element name="fields" type="fieldsType"/>
+    </xs:choice>
+    <xs:attribute name="name"/>
+  </xs:complexType>
+  <xs:complexType name="itemsType" >
+    <xs:complexContent>
+      <xs:extension base="itemelements">
+        <xs:attribute name="pagebreak-after-print" type="boolean"/>
+        <xs:attribute name="pagebreak-before-print" type="boolean"/>
+        <xs:attribute name="fixed-position"/>
+        <xs:attribute name="height"/>
+        <xs:attributeGroup ref="basicform"/>
+        <xs:attributeGroup ref="fontdef"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="functionsType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  Functions are defined in a function library.
+				  Every referenced function has to be defined in the
+				  library in order to be loaded and executed correctly.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="function" type="functionType"/>
+      <xs:element name="expression" type="expressionType"/>
+      <xs:element name="property-ref" type="property-refType"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="includeType" >
+    <xs:attribute name="src" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="groupheaderType" >
+    <xs:annotation>
+      <xs:documentation>
+				  A group header is printed before a group starts. A group start
+				  is invoked when one element that was referenced in the field list
+				  changes and on the start of the report generation.
+				
+				  If pagebreak-before-print is set to true, a page break will be forced before
+				  the group header is printed; a pagebreak-after-print does the same after
+				  the group header has been printed.
+				
+				  If repeat is set to true, this header is repeated after an pagebreak
+				  if this group is still active. If an other groupheader in an subgroup
+				  has the repeat flag set, all headers are printed in their order of
+				  appearance.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="itemelements">
+        <xs:attribute name="pagebreak-after-print" type="boolean"/>
+        <xs:attribute name="pagebreak-before-print" type="boolean"/>
+        <xs:attribute name="repeat" type="boolean"/>
+        <xs:attribute name="height"/>
+        <xs:attribute name="fixed-position"/>
+        <xs:attributeGroup ref="basicform"/>
+        <xs:attributeGroup ref="fontdef"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="groupfooterType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  A group footer is printed when a group is finished. A group is
+				  finished, when one element, that was referenced in the field list,
+				  changes its value and at the end of the report generation.
+				
+				  If pagebreak-before-print is set to true, a page break will be forced before
+				  the group footer is printed; a pagebreak-after-print does the same after
+				  the group footer has been printed.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="itemelements">
+        <xs:attribute name="pagebreak-after-print" type="boolean"/>
+        <xs:attribute name="pagebreak-before-print" type="boolean"/>
+        <xs:attribute name="height"/>
+        <xs:attribute name="fixed-position"/>
+        <xs:attributeGroup ref="basicform"/>
+        <xs:attributeGroup ref="fontdef"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="fieldsType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  The name of the fields or functions that have to change for
+				  a group break.
+				
+				  A report group may have more than one group element.
+				  A fields list may only contain strings defining the
+				  names of the items which form a group. This is not
+				  limited to items from the data model, you may also
+				  enter expressions here.
+				
+				  If you define a subgroup, then you'll have to include all
+				  fields of the parent group and at least one new field.
+				  The field is not required to exist. If the field does not
+				  exist during the report processing, the value 'null' is used
+				  as replacement for the field's content.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="field" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="functionType" >
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  A defined function has a valid implementing class that implement
+				  the org.jfree.report.expressions.Function interface. Functions have access to the datarow and
+				  can access other functions or expressions or the datasource. Functions are statefull and maintain
+				  their state during the report generation. For stateless userdefined computations consider using
+				  an expression instead of functions, as expression are cheaper to compute and maintain when using
+				  huge reports.
+				
+				  Function parameters are given by propery elements. For visual
+				  editing, function must obey to the java-beans rules (use get*/set*
+				  methods, perhaps provide beaninfo and so on)
+				
+				  The deplevel attribute can be used to priorize the functions. Functions with an higher depencylevel
+				  are executed before any function with lower depency levels. Depencylevels lower than 0 are not allowed.
+
+			</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="properties" type="propertiesType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="class" use="required"/>
+    <xs:attribute name="name" use="required"/>
+    <xs:attribute name="deplevel"/>
+  </xs:complexType>
+  <xs:complexType name="expressionType" >
+    <xs:sequence>
+      <xs:element name="properties" type="propertiesType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="class" use="required"/>
+    <xs:attribute name="name" use="required"/>
+    <xs:attribute name="deplevel"/>
+  </xs:complexType>
+  <xs:complexType name="property-refType"  mixed="true">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+				  A reference to a report property. This property is predefined here and can be accessed
+				  as any datasource. The value defaults to null if no more data is given. The encoding parameter
+				  defaults to "text", "serialized-base64" is implemented later to allow serialized objects
+				  as value for the property.
+			</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" use="required"/>
+    <xs:attribute name="encoding"/>
+  </xs:complexType>
+  <xs:complexType name="propertyType"  mixed="true">
+    <xs:attribute name="name" use="required"/>
+    <xs:attribute name="class"/>
+  </xs:complexType>
+  <xs:complexType name="propertiesType" >
+    <xs:sequence>
+      <xs:element name="property" type="propertyType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
